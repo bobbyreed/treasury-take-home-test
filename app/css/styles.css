@@ -1,0 +1,47 @@
+/* Base styles — accessibility-minded defaults (large text, high contrast,
+   visible focus). Full UI styling arrives with the single-label view (M5). */
+
+:root {
+  --bg: #ffffff;
+  --fg: #1a1a1a;
+  --muted: #5a5a5a;
+  --accent: #0b5d8a;
+  --pass: #1d7a34;
+  --review: #b23b00;
+  --line: #d8d8d8;
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html { font-size: 18px; }
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  color: var(--fg);
+  background: var(--bg);
+  line-height: 1.5;
+}
+
+.app-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 2px solid var(--line);
+}
+
+.app-header h1 { margin: 0; font-size: 1.6rem; }
+.tagline { margin: 0.25rem 0 0; color: var(--muted); }
+
+main { padding: 1.5rem; max-width: 60rem; margin: 0 auto; }
+
+.scaffold-note {
+  color: var(--muted);
+  border: 1px dashed var(--line);
+  padding: 1rem;
+  border-radius: 6px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}

@@ -1,0 +1,10 @@
+{
+  "name": "treasury-take-home-test",
+  "version": "0.1.0",
+  "description": "AI-powered TTB alcohol label verification prototype (offline-first OCR + optional Claude verification).",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node --test"
+  }
+}

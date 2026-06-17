@@ -215,3 +215,27 @@ stateDiagram-v2
   Pass --> [*]
   NeedsReview --> [*]
 ```
+
+---
+
+## 8. Deployment topology (one project, two Hosting sites + blog)
+
+```mermaid
+flowchart TB
+  agent([Compliance Agent])
+  reader([Blog reader])
+
+  subgraph Project["Single Firebase Project"]
+    AppSite["Hosting site: app<br/>vanilla webapp + Tesseract.js assets"]
+    BlogSite["Hosting site: blog<br/>vanilla static build journal (Claude)"]
+    Fn["Cloud Function: verifyLabel<br/>(holds Anthropic API key)"]
+  end
+
+  ANT["Anthropic API — Claude Sonnet 4.6"]
+
+  agent --> AppSite
+  reader --> BlogSite
+  AppSite -. "/api/verifyLabel rewrite (online, optional)" .-> Fn
+  Fn --> ANT
+```
+

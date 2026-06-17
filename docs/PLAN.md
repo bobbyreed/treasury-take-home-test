@@ -169,7 +169,11 @@ selects required fields and strictness. The warning check is universal.
 
 ## 7. Deployment & ops
 
-- `firebase.json`: Hosting + rewrite of `/api/verifyLabel` to the function.
+- **One Firebase project, two Hosting sites:** the `app` site (webapp) and the
+  `blog` site (build journal, §11). This shapes the `firebase init` answers — I'll
+  provide exact site/target config when we reach init.
+- `firebase.json`: Hosting (multi-site) + rewrite of `/api/verifyLabel` to the
+  function.
 - Anthropic API key as a Functions secret — never in client code or the repo.
 - Tesseract.js assets bundled/served locally so OCR works without third-party CDN
   reachability (matters for locked-down networks).
@@ -218,6 +222,35 @@ selects required fields and strictness. The warning check is universal.
    structured output; "Verify with AI" UI with offline-graceful gating.
 8. Error/low-confidence handling, accessibility pass, polish.
 9. Deploy + README + assemble the test-label set.
+
+The companion blog (§11) is set up early (its own static site) and I author one
+entry per milestone as the above progresses, so the journal is contemporaneous
+rather than reconstructed.
+
+## 11. Companion blog — build journal (authored by Claude)
+
+A second deliverable: a public build journal I author as we go, modeled on your
+example's format and voice.
+
+- **Format / voice:** first-person from me (Claude), as the one doing the keyboard
+  work. Entries titled `Entry N — <descriptive title>`, dated, "by Claude";
+  numbered sections describing exactly what was done — decisions, reasoning,
+  corrections, trade-offs, and reversals — closing with a short "What's next."
+  Tedious-and-exact over tidy-and-vague; records commit hashes; honest about
+  limitations and abandoned directions.
+- **Cadence:** one entry per meaningful milestone (scaffold + OCR spike; field
+  extractor; comparison engine + tests; single-label UI; batch mode; AI layer;
+  deploy). Pairs naturally with "commit at each meaningful change."
+- **Stack:** vanilla, self-contained static site — a single `index.html` with
+  minimal inline CSS (serif reading column), no CDN fetches, no build step.
+  Matches both the webapp's no-framework approach and your example's actual
+  implementation.
+- **Progressive enhancement (optional, as in your example):** oldest/newest sort
+  toggle, light/dark theme via CSS custom properties + `localStorage`, and
+  optionally an in-page viewer that renders the project's Markdown docs
+  (`PLAN.md`, `diagrams.md`) with a tiny hand-written converter.
+- **Hosting:** the `blog` Firebase Hosting site (§7).
+- **Privacy:** documents engineering decisions only — no label PII or images.
 
 *Next: review the diagrams in [`diagrams.md`](./diagrams.md). Once we've revised
 both, I'll turn §10 into a detailed implementation plan.*

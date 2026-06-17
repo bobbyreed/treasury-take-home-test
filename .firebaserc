@@ -1,0 +1,18 @@
+{
+  "projects": {
+    "default": "treasury-take-home-test"
+  },
+  "targets": {
+    "treasury-take-home-test": {
+      "hosting": {
+        "app": [
+          "treasury-take-home-test"
+        ],
+        "blog": [
+          "treasury-take-home-test-blog"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

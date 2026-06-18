@@ -114,3 +114,36 @@ ${CANONICAL_WARNING}`; // no ABV printed
   });
   assert.equal(r.overall, 'PASS');
 });
+
+test('defaults: buildReport() with no args → NEEDS_REVIEW (all required missing)', () => {
+  const r = buildReport();
+  assert.equal(r.overall, 'NEEDS_REVIEW');
+  assert.equal(r.beverageType, 'other');
+  assert.equal(r.usedAI, false);
+});
+
+test('derives OCR text from extracted.lines when rawText is absent', () => {
+  const r = buildReport({
+    beverageType: 'beer',
+    extracted: {
+      lines: [
+        'Mountain Peak Brewing',
+        'India Pale Ale (IPA)',
+        'Brewed & Canned by Mountain Peak Brewing, Denver, CO',
+      ],
+      abv: { percent: 7.2 },
+      netContents: { ml: 355 },
+      warningText: CANONICAL_WARNING,
+      warningAllCaps: true,
+      ocrConfidence: 88,
+    },
+    expected: {
+      brandName: 'Mountain Peak Brewing',
+      classType: 'India Pale Ale (IPA)',
+      netContents: '355 mL',
+      producer: 'Brewed & Canned by Mountain Peak Brewing, Denver, CO',
+    },
+  });
+  assert.equal(r.overall, 'PASS');
+  assert.equal(r.fields.find((f) => f.field === 'brandName').status, 'MATCH');
+});

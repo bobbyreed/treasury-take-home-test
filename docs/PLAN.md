@@ -66,6 +66,11 @@ offline. When the agent is online and wants a second opinion, the extracted data
 - Scale batch from 50 → 400 (tune concurrency, consider Batches API for cost).
 - Side-by-side label-crop vs expected-value highlighting using OCR word boxes.
 - Smarter deskew/perspective correction for hard photos.
+- **Interactive agent-training module (standalone, separate from the app —
+  like the blog, not linked into it):** a guided tour of the tool's features
+  followed by challenge examinations — prompts and dialogs that quiz agents on
+  how to operate the tool and how to interpret a verdict. Can draw on the growing
+  pool of generated labels as exercise material.
 
 ## 3. Architecture — offline core, optional online booster
 

@@ -265,5 +265,28 @@ BeverageRuleSet { beverageType, requiredFields[], abvRequired, notes }
 2. TTB data-structure email → may refine §5 beverage rules / §6 field set.
 3. Beverage type: agent-selected (MVP) with text-inference as a later nicety.
 
-*On your approval, I start at **M0 (scaffold)**, commit, write blog Entry 1, then
-signal you for **firebase init at M1**.*
+## 12. Engineering-consolidation phase (after M5 — the first full prototype)
+
+Once M5 works end-to-end in the browser (the first full prototype), **pause
+feature work** and run a consolidation phase, in order, before M6+:
+
+1. **Architecture analysis** — review the module boundaries, data flow, and the
+   offline/online split now that real code exists.
+2. **`/tidy-first-refactor`** — Kent Beck "Tidy First?" structural cleanup
+   (behavior-preserving), separated from behavior changes.
+3. **`/test-coverage`** — raise coverage toward ≥ 80%, focused on the pipeline
+   and any thin spots the UI introduced.
+4. **Requirements analysis** — from `instructions/README.md`, define **users,
+   personas, and user stories** drawn from the stakeholder interviews (Sarah,
+   Marcus, Dave, Jenny).
+5. **Traceability** — align every built and planned feature to a discovered user
+   story; surface gaps (unmet needs) and over-builds (features no story needs).
+
+Then resume **M6 (batch) → M7 (AI) → M8 (hardening) → M9 (deploy)**, reprioritized
+by the user stories. (`/tidy-first-refactor` and `/test-coverage` are user-invoked
+skills; I'll run them at the pause.)
+
+---
+
+*Milestones M0–M5 build to the first full prototype; then the §12 consolidation
+phase runs before the remaining milestones.*

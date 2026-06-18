@@ -9,13 +9,67 @@
 <body>
   <header class="app-header">
     <h1>TTB Label Verification</h1>
-    <p class="tagline">Offline-first label checks &middot; prototype</p>
+    <p class="tagline">Check a label against its application — runs on your computer.</p>
   </header>
 
   <main id="app">
-    <p class="scaffold-note">
-      Scaffold (M0). The single-label verification UI lands at M5; batch mode at M6.
-    </p>
+    <form id="verify-form" novalidate>
+      <fieldset>
+        <legend>1. Label image</legend>
+        <div class="field-row">
+          <label class="file-label" for="labelImage">Choose a label photo or scan</label>
+          <input type="file" id="labelImage" accept="image/*">
+        </div>
+        <label class="checkbox">
+          <input type="checkbox" id="binarize" checked>
+          Clean up the image before reading (recommended)
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>2. Application values to check</legend>
+
+        <div class="grid">
+          <label>Beverage type
+            <select id="beverageType">
+              <option value="spirits">Distilled spirits</option>
+              <option value="wine">Wine</option>
+              <option value="beer">Beer / malt</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+
+          <label class="checkbox import-checkbox">
+            <input type="checkbox" id="isImport">
+            Imported (requires country of origin)
+          </label>
+
+          <label>Brand name
+            <input type="text" id="brandName" autocomplete="off">
+          </label>
+          <label>Class / type
+            <input type="text" id="classType" autocomplete="off">
+          </label>
+          <label>Alcohol content
+            <input type="text" id="abv" placeholder="e.g. 45% Alc./Vol. (90 Proof)" autocomplete="off">
+          </label>
+          <label>Net contents
+            <input type="text" id="netContents" placeholder="e.g. 750 mL" autocomplete="off">
+          </label>
+          <label>Producer / bottler
+            <input type="text" id="producer" autocomplete="off">
+          </label>
+          <label>Country of origin
+            <input type="text" id="countryOfOrigin" placeholder="imports only" autocomplete="off">
+          </label>
+        </div>
+      </fieldset>
+
+      <button type="submit" id="verifyBtn" class="primary">Verify label</button>
+    </form>
+
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+    <section id="result" aria-live="polite"></section>
   </main>
 
   <script type="module" src="./js/main.js"></script>

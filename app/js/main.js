@@ -1,12 +1,9 @@
 /**
- * App entry point. Wires the UI to the recognition pipeline.
- *
- * Scaffold (M0): no behavior yet. The single-label flow is wired at M5
- * (`ui/single.js`) and batch mode at M6 (`ui/batch.js`). Imports are left
- * commented until those modules are implemented, so loading the page is inert.
+ * App entry point. Wires the single-label verification flow (M5). Batch mode
+ * (M6) is added after the engineering-consolidation phase.
  */
+import { initSingle } from './ui/single.js';
 
-// import { initSingle } from './ui/single.js';
-// import { initBatch } from './ui/batch.js';
-
-console.info('TTB Label Verification — scaffold (M0). UI lands at M5/M6.');
+window.addEventListener('DOMContentLoaded', () => {
+  initSingle(document);
+});

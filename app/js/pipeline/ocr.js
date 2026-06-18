@@ -15,25 +15,43 @@ const VENDOR = new URL('../../vendor/tesseract/', import.meta.url).href;
 
 let workerPromise = null;
 
+const WORKER_OPTS = {
+  workerPath: VENDOR + 'worker.min.js',
+  corePath: VENDOR + 'tesseract-core-simd-lstm.wasm.js',
+  langPath: VENDOR, // directory containing eng.traineddata.gz
+  gzip: true,
+};
+
+async function makeWorker() {
+  const worker = await Tesseract.createWorker('eng', 1 /* LSTM_ONLY */, WORKER_OPTS);
+  // Auto page segmentation. The worker default treats the whole label as one
+  // uniform block and drops large display lines (brand, class/type); PSM 3
+  // (AUTO) does proper layout analysis and picks those titles up.
+  await worker.setParameters({
+    tessedit_pageseg_mode: (Tesseract.PSM && Tesseract.PSM.AUTO) || '3',
+  });
+  return worker;
+}
+
 function getWorker() {
-  if (!workerPromise) {
-    workerPromise = (async () => {
-      const worker = await Tesseract.createWorker('eng', 1 /* LSTM_ONLY */, {
-        workerPath: VENDOR + 'worker.min.js',
-        corePath: VENDOR + 'tesseract-core-simd-lstm.wasm.js',
-        langPath: VENDOR, // directory containing eng.traineddata.gz
-        gzip: true,
-      });
-      // Auto page segmentation. The worker default treats the whole label as one
-      // uniform block and drops large display lines (brand, class/type); PSM 3
-      // (AUTO) does proper layout analysis and picks those titles up.
-      await worker.setParameters({
-        tessedit_pageseg_mode: (Tesseract.PSM && Tesseract.PSM.AUTO) || '3',
-      });
-      return worker;
-    })();
-  }
+  if (!workerPromise) workerPromise = makeWorker();
   return workerPromise;
+}
+
+/**
+ * Create a Tesseract scheduler backed by `size` configured workers, for batch
+ * concurrency. Submit work with `scheduler.addJob('recognize', image)` and call
+ * `scheduler.terminate()` when finished.
+ * @param {number} [size=4]
+ * @returns {Promise<object>} a Tesseract scheduler
+ */
+export async function createPool(size = 4) {
+  const scheduler = Tesseract.createScheduler();
+  const workers = await Promise.all(
+    Array.from({ length: Math.max(1, size) }, () => makeWorker()),
+  );
+  workers.forEach((w) => scheduler.addWorker(w));
+  return scheduler;
 }
 
 /**

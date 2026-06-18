@@ -1,0 +1,9 @@
+filename,beverageType,isImport,brandName,classType,abv,netContents,producer,countryOfOrigin
+OldTomDistillery0.png,spirits,false,Old Tom Distillery,Kentucky Straight Bourbon Whiskey,45% Alc./Vol. (90 Proof),750 mL,"Distilled & Bottled by Old Tom Distillery, Lexington, KY",
+SmokyMountain.png,spirits,false,Smoky Mountain,Corn Whiskey,50% Alc./Vol. (100 Proof),375 mL,"Distilled & Bottled by Smoky Mountain Distillery, Gatlinburg, TN",
+HighDesert-Mezcal-Mexico.png,spirits,true,High Desert,Mezcal Joven (100% Maguey Espadín),42% Alc./Vol. (84 Proof),750 mL,"Product of Mexico. Bottled by Mezcal de Oaxaca, S.A. de C.V. Imported by Border Crossings Imports, El Paso, TX",MEXICO
+MountainPeak.png,beer,false,Mountain Peak Brewing,India Pale Ale (IPA),7.2% Alc./Vol.,12 FL. OZ. (355 mL),"Brewed & Canned by Mountain Peak Brewing, Denver, CO",
+CityCenter.png,beer,false,City Center Brewery,Light Lager,4.2% Alc./Vol.,12 FL. OZ. (355 mL),"Brewed & Canned by City Center Brewery, Milwaukee, WI",
+ChateauDeLaRoche.png,wine,true,Château de la Roche,Sancerre (White Wine),12.5% VOL.,750 mL,"Product of France. Bottled by Vignoble Imports, New York, NY",FRANCE
+SilverCreekVineyard.png,wine,false,Silver Creek Vineyard,Cabernet Sauvignon,14.8% VOL.,750 mL,"Produced & Bottled by Silver Creek Vineyard, St. Helena, CA",
+VikingBlood-CheeryMead-135-750ml.png,wine,false,Viking Blood,Cherry Mead (Honey Wine with cherries),13.5% VOL.,750 mL,"Produced & Bottled by Heritage Meadery, Burlington, VT",

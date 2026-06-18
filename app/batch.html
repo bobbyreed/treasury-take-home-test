@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TTB Label Verification — Batch</title>
+  <link rel="stylesheet" href="./css/styles.css">
+  <link rel="icon" href="./logo.svg" type="image/svg+xml">
+</head>
+<body>
+  <header class="app-header">
+    <img class="app-logo" src="./logo.svg" alt="" width="48" height="48">
+    <div class="app-title">
+      <h1>TTB Label Verification</h1>
+      <p class="tagline">Batch — verify many labels at once.</p>
+    </div>
+  </header>
+
+  <nav class="app-nav" aria-label="Modes">
+    <a href="./index.html">Single label</a>
+    <a href="./batch.html" aria-current="page">Batch</a>
+  </nav>
+
+  <main id="app">
+    <form id="batch-form" novalidate>
+      <fieldset>
+        <legend>1. Label images</legend>
+        <label class="file-label" for="images">Choose label photos or scans (select many)</label>
+        <input type="file" id="images" accept="image/*" multiple>
+      </fieldset>
+
+      <fieldset>
+        <legend>2. Application data (CSV)</legend>
+        <p class="hint">
+          A CSV of the expected values, one row per label, paired to the image by a
+          <code>filename</code> column. Columns: <code>filename, beverageType,
+          isImport, brandName, classType, abv, netContents, producer,
+          countryOfOrigin</code>. See
+          <code>sample-labels/expected-values.csv</code> for an example. Images
+          without a matching row are reported as "no application data."
+        </p>
+        <label class="file-label" for="csv">Choose expected-values CSV</label>
+        <input type="file" id="csv" accept=".csv,text/csv">
+      </fieldset>
+
+      <fieldset>
+        <legend>3. Options</legend>
+        <label class="checkbox"><input type="checkbox" id="binarize"> Clean up images before reading</label>
+        <label>OCR workers (concurrency)
+          <input type="number" id="concurrency" value="4" min="1" max="8">
+        </label>
+      </fieldset>
+
+      <button type="button" id="run" class="primary">Verify batch</button>
+    </form>
+
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+    <progress id="progress" value="0" max="100" hidden></progress>
+
+    <div class="batch-controls">
+      <label class="checkbox"><input type="checkbox" id="needsReviewOnly"> Show only labels that need review</label>
+      <button type="button" id="export" disabled>Export results (CSV)</button>
+    </div>
+
+    <section id="results" aria-live="polite"></section>
+  </main>
+
+  <footer class="app-footer">
+    Prototype for evaluation — not an official TTB or U.S. Department of the Treasury system.
+  </footer>
+
+  <script type="module">
+    import { initBatch } from './js/ui/batch.js';
+    window.addEventListener('DOMContentLoaded', () => initBatch(document));
+  </script>
+</body>
+</html>

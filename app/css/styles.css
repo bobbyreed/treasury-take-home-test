@@ -132,3 +132,25 @@ button.primary:disabled { opacity: 0.6; cursor: progress; }
 }
 
 .scaffold-note { color: var(--muted); border: 1px dashed var(--line); padding: 1rem; border-radius: 4px; }
+
+/* In-app mode nav */
+.app-nav { display: flex; gap: 0.25rem; padding: 0.5rem 1.5rem; background: #f0f0f0; border-bottom: 1px solid var(--line); }
+.app-nav a { padding: 0.4rem 0.9rem; border-radius: 4px; color: var(--primary); font-weight: 700; text-decoration: none; }
+.app-nav a:hover { background: #e1e7ef; }
+.app-nav a[aria-current="page"] { background: var(--primary); color: #fff; }
+
+/* Batch */
+.hint { color: var(--muted); font-size: 0.9rem; margin: 0 0 0.6rem; }
+input[type="number"] { width: 6rem; padding: 0.45rem 0.6rem; font-size: 1rem; border: 1px solid var(--muted); border-radius: 4px; margin-top: 0.25rem; }
+#progress { width: 100%; height: 1.1rem; margin: 0.25rem 0 1rem; }
+.batch-controls { display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap; margin: 0.5rem 0 1rem; }
+.batch-controls button { font-size: 1rem; padding: 0.45rem 1rem; border: 1px solid var(--primary); background: #fff; color: var(--primary); border-radius: 4px; font-weight: 700; cursor: pointer; }
+.batch-controls button:disabled { opacity: 0.5; cursor: default; }
+
+.results-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+.results-table th, .results-table td { text-align: left; padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+.results-table th { background: var(--navy); color: #fff; position: sticky; top: 0; }
+.results-table tr.ok { background: var(--ok-bg); }
+.results-table tr.warn { background: var(--warn-bg); }
+.results-table tr.bad { background: var(--bad-bg); }
+.results-table tr.muted { background: #f4f4f4; color: var(--muted); }

@@ -25,7 +25,8 @@ body {
   line-height: 1.5;
 }
 
-.app-header { padding: 1.25rem 1.5rem; border-bottom: 2px solid var(--line); }
+.app-header { display: flex; align-items: center; gap: 1rem; padding: 1.25rem 1.5rem; border-bottom: 2px solid var(--line); }
+.app-logo { width: 48px; height: 48px; flex: none; }
 .app-header h1 { margin: 0; font-size: 1.7rem; }
 .tagline { margin: 0.25rem 0 0; color: var(--muted); }
 

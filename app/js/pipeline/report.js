@@ -16,8 +16,9 @@ import {
   compareNetContents,
   compareWarning,
 } from './compare.js';
+import { STATUS, OVERALL } from './status.js';
 
-const PASSING = new Set(['MATCH', 'MINOR_DIFFERENCE']);
+const PASSING = new Set([STATUS.MATCH, STATUS.MINOR_DIFFERENCE]);
 
 /**
  * @param {{
@@ -65,10 +66,10 @@ export function buildReport({
     note: w.note,
   });
 
-  let overall = 'PASS';
+  let overall = OVERALL.PASS;
   for (const fc of fields) {
     if (required.has(fc.field) && !PASSING.has(fc.status)) {
-      overall = 'NEEDS_REVIEW';
+      overall = OVERALL.NEEDS_REVIEW;
       break;
     }
   }

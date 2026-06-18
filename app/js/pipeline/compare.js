@@ -13,6 +13,7 @@
  */
 import { parseAbv, parseNetContents } from './extract.js';
 import { findInText } from './fuzzy.js';
+import { STATUS } from './status.js';
 
 /** Canonical TTB government health warning — the verbatim comparison target. */
 export const CANONICAL_WARNING =
@@ -54,18 +55,18 @@ const mk = (field, expectedValue, extractedValue, status, note) =>
  */
 export function compareFreeText(field, expected, ocrText, ocrConfidence = null) {
   if (expected == null || String(expected).trim() === '') {
-    return mk(field, expected ?? null, null, 'MISSING', 'No expected value provided');
+    return mk(field, expected ?? null, null, STATUS.MISSING, 'No expected value provided');
   }
   const text = String(ocrText || '');
 
   // Exact (case-sensitive, whitespace-normalized) containment.
   if (collapseWs(text).includes(collapseWs(expected))) {
-    return mk(field, expected, collapseWs(expected), 'MATCH', 'Found on label');
+    return mk(field, expected, collapseWs(expected), STATUS.MATCH, 'Found on label');
   }
   // Case/punctuation-insensitive containment → present but formatted differently.
   const nE = normalize(expected);
   if (nE && normalize(text).includes(nE)) {
-    return mk(field, expected, expected, 'MINOR_DIFFERENCE', 'Present; case/punctuation differs');
+    return mk(field, expected, expected, STATUS.MINOR_DIFFERENCE, 'Present; case/punctuation differs');
   }
   // Multi-word / multi-line values (e.g. a producer line split across rows, with
   // OCR noise between) — match by how many expected tokens appear in the OCR
@@ -73,21 +74,21 @@ export function compareFreeText(field, expected, ocrText, ocrConfidence = null) 
   const expectedTokens = tokens(expected);
   if (expectedTokens.length >= 4) {
     const cov = coverage(expectedTokens, text);
-    if (cov >= 0.9) return mk(field, expected, expected, 'MATCH', `Present (text coverage ${Math.round(cov * 100)}%)`);
-    if (cov >= 0.78) return mk(field, expected, expected, 'MINOR_DIFFERENCE', `Mostly present (coverage ${Math.round(cov * 100)}%)`);
+    if (cov >= 0.9) return mk(field, expected, expected, STATUS.MATCH, `Present (text coverage ${Math.round(cov * 100)}%)`);
+    if (cov >= 0.78) return mk(field, expected, expected, STATUS.MINOR_DIFFERENCE, `Mostly present (coverage ${Math.round(cov * 100)}%)`);
   }
   // Fuzzy (tolerates OCR slips on shorter values).
   const fz = findInText(expected, text, { threshold: 0.6 });
   if (fz && fz.score <= 0.2) {
-    return mk(field, expected, fz.value, 'MATCH', `Fuzzy match (score ${fz.score.toFixed(2)})`);
+    return mk(field, expected, fz.value, STATUS.MATCH, `Fuzzy match (score ${fz.score.toFixed(2)})`);
   }
   if (fz && fz.score <= 0.45) {
-    return mk(field, expected, fz.value, 'MINOR_DIFFERENCE', `Close match (score ${fz.score.toFixed(2)})`);
+    return mk(field, expected, fz.value, STATUS.MINOR_DIFFERENCE, `Close match (score ${fz.score.toFixed(2)})`);
   }
   if (ocrConfidence != null && ocrConfidence < LOW_CONFIDENCE_BELOW) {
-    return mk(field, expected, null, 'LOW_CONFIDENCE', 'Not found; OCR confidence low — try a clearer image');
+    return mk(field, expected, null, STATUS.LOW_CONFIDENCE, 'Not found; OCR confidence low — try a clearer image');
   }
-  return mk(field, expected, fz ? fz.value : null, 'MISMATCH', 'Expected value not found on label');
+  return mk(field, expected, fz ? fz.value : null, STATUS.MISMATCH, 'Expected value not found on label');
 }
 
 /**
@@ -97,15 +98,15 @@ export function compareFreeText(field, expected, ocrText, ocrConfidence = null) 
 export function compareAbv(expectedAbv, extractedAbv = {}, ocrConfidence = null) {
   const expPercent =
     typeof expectedAbv === 'number' ? expectedAbv : parseAbv(String(expectedAbv ?? '')).percent;
-  if (expPercent == null) return mk('abv', expectedAbv ?? null, extractedAbv.percent ?? null, 'MISSING', 'No expected ABV');
+  if (expPercent == null) return mk('abv', expectedAbv ?? null, extractedAbv.percent ?? null, STATUS.MISSING, 'No expected ABV');
   if (extractedAbv.percent == null) {
     return ocrConfidence != null && ocrConfidence < LOW_CONFIDENCE_BELOW
-      ? mk('abv', expPercent, null, 'LOW_CONFIDENCE', 'ABV not read; OCR confidence low')
-      : mk('abv', expPercent, null, 'MISMATCH', 'No alcohol content found on label');
+      ? mk('abv', expPercent, null, STATUS.LOW_CONFIDENCE, 'ABV not read; OCR confidence low')
+      : mk('abv', expPercent, null, STATUS.MISMATCH, 'No alcohol content found on label');
   }
   const diff = Math.abs(expPercent - extractedAbv.percent);
-  if (diff < 0.05) return mk('abv', expPercent, extractedAbv.percent, 'MATCH', '');
-  return mk('abv', expPercent, extractedAbv.percent, 'MISMATCH',
+  if (diff < 0.05) return mk('abv', expPercent, extractedAbv.percent, STATUS.MATCH, '');
+  return mk('abv', expPercent, extractedAbv.percent, STATUS.MISMATCH,
     `Expected ${expPercent}%, label shows ${extractedAbv.percent}%`);
 }
 
@@ -115,17 +116,17 @@ export function compareAbv(expectedAbv, extractedAbv = {}, ocrConfidence = null)
  */
 export function compareNetContents(expectedNet, extractedNet = {}, ocrConfidence = null) {
   const expMl = typeof expectedNet === 'number' ? expectedNet : parseNetContents(String(expectedNet ?? '')).ml;
-  if (expMl == null) return mk('netContents', expectedNet ?? null, extractedNet.ml ?? null, 'MISSING', 'No expected net contents');
+  if (expMl == null) return mk('netContents', expectedNet ?? null, extractedNet.ml ?? null, STATUS.MISSING, 'No expected net contents');
   if (extractedNet.ml == null) {
     return ocrConfidence != null && ocrConfidence < LOW_CONFIDENCE_BELOW
-      ? mk('netContents', expMl, null, 'LOW_CONFIDENCE', 'Net contents not read; OCR confidence low')
-      : mk('netContents', expMl, null, 'MISMATCH', 'No net contents found on label');
+      ? mk('netContents', expMl, null, STATUS.LOW_CONFIDENCE, 'Net contents not read; OCR confidence low')
+      : mk('netContents', expMl, null, STATUS.MISMATCH, 'No net contents found on label');
   }
   const tol = Math.max(1, expMl * 0.02); // 2% covers fl-oz↔mL rounding
   if (Math.abs(expMl - extractedNet.ml) <= tol) {
-    return mk('netContents', `${expMl} mL`, `${extractedNet.ml} mL`, 'MATCH', '');
+    return mk('netContents', `${expMl} mL`, `${extractedNet.ml} mL`, STATUS.MATCH, '');
   }
-  return mk('netContents', `${expMl} mL`, `${extractedNet.ml} mL`, 'MISMATCH', 'Net contents differ');
+  return mk('netContents', `${expMl} mL`, `${extractedNet.ml} mL`, STATUS.MISMATCH, 'Net contents differ');
 }
 
 function tokens(s) {
@@ -161,14 +162,14 @@ export function warningCoverage(extractedText) {
  */
 export function compareWarning(extractedWarning) {
   if (!extractedWarning || !extractedWarning.warningText) {
-    return { status: 'MISSING', note: 'Government warning not found on label' };
+    return { status: STATUS.MISSING, note: 'Government warning not found on label' };
   }
   if (!extractedWarning.allCaps) {
-    return { status: 'MISMATCH', note: '"GOVERNMENT WARNING:" must be in all caps' };
+    return { status: STATUS.MISMATCH, note: '"GOVERNMENT WARNING:" must be in all caps' };
   }
   const cov = warningCoverage(extractedWarning.warningText);
   const pct = Math.round(cov * 100);
-  if (cov >= 0.9) return { status: 'MATCH', note: `Standard warning present (text coverage ${pct}%)` };
-  if (cov >= 0.7) return { status: 'MINOR_DIFFERENCE', note: `Warning mostly matches (coverage ${pct}%) — verify wording` };
-  return { status: 'MISMATCH', note: `Warning wording differs from the required statement (coverage ${pct}%)` };
+  if (cov >= 0.9) return { status: STATUS.MATCH, note: `Standard warning present (text coverage ${pct}%)` };
+  if (cov >= 0.7) return { status: STATUS.MINOR_DIFFERENCE, note: `Warning mostly matches (coverage ${pct}%) — verify wording` };
+  return { status: STATUS.MISMATCH, note: `Warning wording differs from the required statement (coverage ${pct}%)` };
 }

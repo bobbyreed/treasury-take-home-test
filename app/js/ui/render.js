@@ -4,12 +4,14 @@
  * Browser-only.
  */
 
+import { STATUS, OVERALL } from '../pipeline/status.js';
+
 const STATUS_META = {
-  MATCH: { icon: '✓', label: 'Matches', cls: 'ok' },
-  MINOR_DIFFERENCE: { icon: '≈', label: 'Minor difference', cls: 'minor' },
-  MISMATCH: { icon: '✗', label: 'Does not match', cls: 'bad' },
-  MISSING: { icon: '✗', label: 'Missing', cls: 'bad' },
-  LOW_CONFIDENCE: { icon: '?', label: 'Couldn’t read — try a clearer image', cls: 'warn' },
+  [STATUS.MATCH]: { icon: '✓', label: 'Matches', cls: 'ok' },
+  [STATUS.MINOR_DIFFERENCE]: { icon: '≈', label: 'Minor difference', cls: 'minor' },
+  [STATUS.MISMATCH]: { icon: '✗', label: 'Does not match', cls: 'bad' },
+  [STATUS.MISSING]: { icon: '✗', label: 'Missing', cls: 'bad' },
+  [STATUS.LOW_CONFIDENCE]: { icon: '?', label: 'Couldn’t read — try a clearer image', cls: 'warn' },
 };
 
 const FIELD_LABEL = {
@@ -30,7 +32,7 @@ export function renderReport(report) {
   const root = document.createElement('div');
   root.className = 'report';
 
-  const pass = report.overall === 'PASS';
+  const pass = report.overall === OVERALL.PASS;
 
   const banner = document.createElement('h2');
   banner.className = `verdict ${pass ? 'verdict-pass' : 'verdict-review'}`;

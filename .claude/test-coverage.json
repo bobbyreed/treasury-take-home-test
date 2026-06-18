@@ -1,0 +1,10 @@
+{
+  "language": "JavaScript (Node, ESM)",
+  "framework": "none (vanilla)",
+  "test_runner": "node:test (built-in)",
+  "coverage_tool": "node --experimental-test-coverage (built-in)",
+  "coverage_command": "npm run coverage",
+  "features_tested": ["rules", "fuzzy", "compare", "extract", "report", "text"],
+  "last_coverage_pct": 100,
+  "notes": "Scope = pure pipeline core (excludes vendored libs and browser-only modules: preprocess/ocr/ui/ai/main, which need a DOM/WASM and are validated in-browser). Line 100%, branch 95.8%, funcs 100%."
+}

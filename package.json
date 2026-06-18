@@ -5,6 +5,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "coverage": "node --test --experimental-test-coverage --test-coverage-exclude='app/vendor/**' --test-coverage-exclude='test/**'"
   }
 }

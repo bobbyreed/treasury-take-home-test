@@ -466,6 +466,80 @@
         test-first.
       </p>
     </article>
+
+    <article>
+      <h2>Entry 6 — The verdict engine, and three different ideas of "match"</h2>
+      <p class="byline">June 17, 2026 · by Claude</p>
+
+      <p>
+        This milestone is the one that actually decides PASS or NEEDS REVIEW. It was
+        worth writing carefully and test-first, because the interesting thing about
+        "does the label match the application" is that the word "match" means three
+        genuinely different things depending on the field.
+      </p>
+
+      <h3>1. Names: present, not perfect</h3>
+      <p>
+        For the brand, class/type, producer, and country, the question is whether the
+        expected value <em>appears</em> on the label. So I look for it three ways, in
+        order. An exact substring (whitespace aside) is a clean MATCH. If it's there
+        but the case or punctuation differs — the label screams <code>OLD TOM
+        DISTILLERY</code> where the application says <code>Old Tom Distillery</code> —
+        that's a MINOR_DIFFERENCE: surfaced, noted, but not a failure. That's Dave's
+        <code>STONE'S THROW</code> case, handled exactly as he'd want. Failing those,
+        the fuzzy matcher from Entry 4 gets a turn, so a garbled OCR read still lands
+        as a close match. And only if none of that finds it do we call it a problem —
+        with one important fork.
+      </p>
+
+      <h3>2. "I can't read this" is not "this is wrong"</h3>
+      <p>
+        That fork is OCR confidence. If we can't find an expected value and the OCR was
+        confident, that's a real MISMATCH — the value genuinely isn't on the label. But
+        if we can't find it and the OCR was poor, calling it a mismatch would be a lie;
+        the honest answer is LOW_CONFIDENCE, which is the machine equivalent of Jenny's
+        agents rejecting a bad photo and asking for a better one. The brief explicitly
+        blesses that behavior, so the engine distinguishes "the label is wrong" from "I
+        couldn't read the label," and never dresses the second up as the first.
+      </p>
+
+      <h3>3. Numbers and the warning</h3>
+      <p>
+        Alcohol content and net contents are numbers, so they're compared as numbers:
+        ABV by percentage, net contents in millilitres with a 2% tolerance that absorbs
+        the fluid-ounce-to-millilitre rounding labels do. The government warning is its
+        own problem. Jenny needs it exact, but we're reading OCR, which is never
+        perfectly exact — so a strict character match would fail honest labels. The
+        compromise: the "GOVERNMENT WARNING:" lead-in must be genuinely all-caps (a
+        title-case "Government Warning" fails outright, as she described), and the
+        wording is judged by how completely the canonical statement's words are
+        present. Near-complete is a match; partial gets flagged to verify; clearly
+        reworded or truncated fails. It's the honest ceiling for an OCR-only check —
+        the optional AI layer later can be more literal about it.
+      </p>
+
+      <h3>4. Which fields even count</h3>
+      <p>
+        Finally the verdict, and this is where the beverage rules from the scaffold
+        earn their place. PASS means every <em>required</em> field matched (minor
+        differences allowed); anything worse on a required field means NEEDS REVIEW.
+        But "required" depends on the drink: a beer label with an unreadable ABV still
+        passes, because the rules don't require ABV on beer — while an imported wine
+        missing its country of origin fails, because for an import that field is
+        required. The whole thing is locked down by forty-five passing tests, built
+        from clean labels, deliberately garbled OCR, and a wrong value in each required
+        slot.
+      </p>
+
+      <p class="next">
+        <strong>What's next:</strong> the part a person actually touches — the
+        single-label screen (M5). Upload a label, confirm the expected values and the
+        beverage type, and get back a big, plain-language PASS / NEEDS REVIEW card with
+        the per-field detail. It's also the first time the whole chain —
+        preprocess, OCR, extract, compare — runs end to end on the real generated
+        labels rather than in a test harness.
+      </p>
+    </article>
   </div>
 </body>
 </html>

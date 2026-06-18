@@ -15,6 +15,7 @@ import {
   compareAbv,
   compareNetContents,
   compareWarning,
+  effectiveConfidence,
 } from './compare.js';
 import { STATUS, OVERALL } from './status.js';
 
@@ -41,7 +42,7 @@ export function buildReport({
 } = {}) {
   const rules = rulesFor(beverageType, isImport);
   const required = new Set(rules.requiredFields);
-  const conf = extracted.ocrConfidence ?? null;
+  const conf = effectiveConfidence(extracted);
   const text = extracted.rawText || (extracted.lines ? extracted.lines.join('\n') : '');
 
   const fields = [

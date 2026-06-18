@@ -14,12 +14,30 @@
 import { parseAbv, parseNetContents } from './extract.js';
 import { findInText } from './fuzzy.js';
 import { STATUS } from './status.js';
-import { CANONICAL_WARNING, LOW_CONFIDENCE_BELOW } from './constants.js';
+import { CANONICAL_WARNING, LOW_CONFIDENCE_BELOW, GARBLE_RATIO_LIMIT } from './constants.js';
 import { normalize, tokens, coverage } from './text.js';
 
 // Re-export for callers/tests that historically imported these from here.
 export { CANONICAL_WARNING } from './constants.js';
 export { normalize } from './text.js';
+
+/**
+ * Effective OCR confidence for the "unreadable vs wrong" decision. A label can
+ * have a high *average* confidence while one stylized field (e.g. a decorative
+ * title) is unreadable garbage — so if a meaningful share of words came back
+ * garbled, treat the read as low-confidence even when the average looks fine.
+ * That routes a not-found field to "couldn't read" rather than a false mismatch.
+ * @param {{ ocrConfidence?: number|null, garbledRatio?: number }} extracted
+ * @returns {number|null}
+ */
+export function effectiveConfidence(extracted = {}) {
+  const base = extracted.ocrConfidence;
+  if (base == null) return null;
+  if ((extracted.garbledRatio ?? 0) >= GARBLE_RATIO_LIMIT) {
+    return Math.min(base, LOW_CONFIDENCE_BELOW - 1);
+  }
+  return base;
+}
 
 const collapseWs = (s) => String(s ?? '').replace(/\s+/g, ' ').trim();
 const mk = (field, expectedValue, extractedValue, status, note) =>

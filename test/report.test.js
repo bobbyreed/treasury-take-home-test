@@ -147,3 +147,51 @@ test('derives OCR text from extracted.lines when rawText is absent', () => {
   assert.equal(r.overall, 'PASS');
   assert.equal(r.fields.find((f) => f.field === 'brandName').status, 'MATCH');
 });
+
+test('garbled label: an unreadable required field is LOW_CONFIDENCE, not MISMATCH', () => {
+  // Body text read cleanly (high overall confidence) but a stylized title was
+  // garbled (garbledRatio high) and isn't in the OCR text.
+  const r = buildReport({
+    beverageType: 'spirits',
+    extracted: {
+      rawText: '45% Alc./Vol. (90 Proof)\n750 mL\nDistilled & Bottled by Old Tom Distillery, Lexington, KY',
+      abv: { percent: 45 },
+      netContents: { ml: 750 },
+      warningText: CANONICAL_WARNING,
+      warningAllCaps: true,
+      ocrConfidence: 82,
+      garbledRatio: 0.3,
+    },
+    expected: {
+      brandName: 'Stagecoach Reserve',
+      classType: 'Kentucky Straight Bourbon Whiskey',
+      abv: '45% Alc./Vol. (90 Proof)',
+      netContents: '750 mL',
+      producer: 'Distilled & Bottled by Old Tom Distillery, Lexington, KY',
+    },
+  });
+  assert.equal(r.fields.find((f) => f.field === 'brandName').status, 'LOW_CONFIDENCE');
+});
+
+test('clean label: a genuinely wrong field is MISMATCH (no garble)', () => {
+  const r = buildReport({
+    beverageType: 'spirits',
+    extracted: {
+      rawText: 'Old Tom Distillery\nKentucky Straight Bourbon Whiskey\n45% Alc./Vol. (90 Proof)\n750 mL\nDistilled & Bottled by Old Tom Distillery, Lexington, KY',
+      abv: { percent: 45 },
+      netContents: { ml: 750 },
+      warningText: CANONICAL_WARNING,
+      warningAllCaps: true,
+      ocrConfidence: 90,
+      garbledRatio: 0,
+    },
+    expected: {
+      brandName: 'Stagecoach Reserve',
+      classType: 'Kentucky Straight Bourbon Whiskey',
+      abv: '45% Alc./Vol. (90 Proof)',
+      netContents: '750 mL',
+      producer: 'Distilled & Bottled by Old Tom Distillery, Lexington, KY',
+    },
+  });
+  assert.equal(r.fields.find((f) => f.field === 'brandName').status, 'MISMATCH');
+});

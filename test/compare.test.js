@@ -7,6 +7,7 @@ import {
   compareNetContents,
   compareWarning,
   warningCoverage,
+  effectiveConfidence,
   CANONICAL_WARNING,
 } from '../app/js/pipeline/compare.js';
 
@@ -122,4 +123,18 @@ test('net contents: unreadable with low confidence → LOW_CONFIDENCE', () => {
 
 test('net contents: unreadable with good confidence → MISMATCH', () => {
   assert.equal(compareNetContents('750 mL', { ml: null }, 85).status, 'MISMATCH');
+});
+
+// --- effectiveConfidence (per-field "unreadable vs wrong") -------------------
+
+test('effectiveConfidence: high garbled ratio forces low confidence', () => {
+  assert.ok(effectiveConfidence({ ocrConfidence: 85, garbledRatio: 0.3 }) < 55);
+});
+
+test('effectiveConfidence: clean read keeps its confidence', () => {
+  assert.equal(effectiveConfidence({ ocrConfidence: 85, garbledRatio: 0 }), 85);
+});
+
+test('effectiveConfidence: null stays null', () => {
+  assert.equal(effectiveConfidence({ ocrConfidence: null, garbledRatio: 0.9 }), null);
 });

@@ -12,6 +12,7 @@
  *    a verification tool: confirm the known values are present rather than guess
  *    them blind.
  */
+import { GARBLE_WORD_CONF } from './constants.js';
 
 /**
  * Parse alcohol content. Handles "45% Alc./Vol. (90 Proof)", "14.8% VOL.",
@@ -94,6 +95,10 @@ export function extractFields(ocr = {}) {
   const text = ocr.text || '';
   const lines = text.split('\n').map((s) => s.trim()).filter(Boolean);
   const warning = locateWarning(text);
+  const words = ocr.words || [];
+  const garbled = words.filter(
+    (w) => typeof w.confidence === 'number' && w.confidence < GARBLE_WORD_CONF,
+  ).length;
   return {
     brandName: null,
     classType: null,
@@ -105,8 +110,9 @@ export function extractFields(ocr = {}) {
     warningAllCaps: warning.allCaps,
     rawText: text,
     lines,
-    wordBoxes: ocr.words || [],
+    wordBoxes: words,
     ocrConfidence: ocr.confidence ?? null,
+    garbledRatio: words.length ? garbled / words.length : 0,
     source: ocr.source || 'OCR',
   };
 }

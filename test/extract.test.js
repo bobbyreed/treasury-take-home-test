@@ -111,3 +111,20 @@ test('parseAbv: alc/abv keyword before the number', () => {
 test('parseAbv: fallback to first percentage when no alc/vol anchor', () => {
   assert.equal(parseAbv('Strength 12% by something').percent, 12);
 });
+
+test('extractFields: garbledRatio from low-confidence words', () => {
+  const f = extractFields({
+    text: 'OLD TOM',
+    words: [
+      { text: 'OLD', confidence: 90 },
+      { text: 'TOM', confidence: 88 },
+      { text: 'xY|', confidence: 20 },
+      { text: '%$', confidence: 10 },
+    ],
+  });
+  assert.equal(f.garbledRatio, 0.5);
+});
+
+test('extractFields: garbledRatio is 0 with no words', () => {
+  assert.equal(extractFields().garbledRatio, 0);
+});

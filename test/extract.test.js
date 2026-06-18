@@ -94,3 +94,20 @@ test('extractFields: surfaces structured fields + raw text/lines', () => {
   // free-text fields are deferred to the fuzzy compare step
   assert.equal(f.brandName, null);
 });
+
+test('extractFields: defaults with no argument', () => {
+  const f = extractFields();
+  assert.equal(f.rawText, '');
+  assert.deepEqual(f.lines, []);
+  assert.equal(f.ocrConfidence, null);
+  assert.equal(f.source, 'OCR');
+  assert.equal(f.abv.percent, null);
+});
+
+test('parseAbv: alc/abv keyword before the number', () => {
+  assert.equal(parseAbv('ABV: 5.5%').percent, 5.5);
+});
+
+test('parseAbv: fallback to first percentage when no alc/vol anchor', () => {
+  assert.equal(parseAbv('Strength 12% by something').percent, 12);
+});

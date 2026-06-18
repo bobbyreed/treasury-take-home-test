@@ -2,9 +2,34 @@
  * OCR via Tesseract.js, vendored and served locally (no CDN) so it works
  * offline / behind the TTB firewall. Assets live in `app/vendor/tesseract/`.
  *
- * Browser-only; not imported by Node tests.
+ * The vendored ESM bundle exposes a default export; `createWorker` is a property
+ * of it. We force the SIMD-LSTM core (the only core variant we vendor) and point
+ * the worker, core, and language paths at our local files. OEM 1 = LSTM_ONLY,
+ * which is what the SIMD-LSTM core supports.
  *
- * @param {HTMLCanvasElement|Blob} image - preprocessed image
+ * Browser-only; not imported by Node tests.
+ */
+import Tesseract from '../../vendor/tesseract/tesseract.esm.min.js';
+
+const VENDOR = new URL('../../vendor/tesseract/', import.meta.url).href;
+
+let workerPromise = null;
+
+function getWorker() {
+  if (!workerPromise) {
+    workerPromise = Tesseract.createWorker('eng', 1 /* LSTM_ONLY */, {
+      workerPath: VENDOR + 'worker.min.js',
+      corePath: VENDOR + 'tesseract-core-simd-lstm.wasm.js',
+      langPath: VENDOR, // directory containing eng.traineddata.gz
+      gzip: true,
+    });
+  }
+  return workerPromise;
+}
+
+/**
+ * Recognize text in an image.
+ * @param {HTMLCanvasElement|Blob|HTMLImageElement} image - ideally preprocessed
  * @returns {Promise<{
  *   text: string,
  *   words: Array<{ text: string, bbox: object, confidence: number }>,
@@ -12,5 +37,21 @@
  * }>}
  */
 export async function recognize(image) {
-  throw new Error('recognize: not implemented (M2)');
+  const worker = await getWorker();
+  const { data } = await worker.recognize(image);
+  const words = (data.words || []).map((w) => ({
+    text: w.text,
+    bbox: w.bbox,
+    confidence: w.confidence,
+  }));
+  return { text: data.text, words, confidence: data.confidence };
+}
+
+/** Tear down the worker (frees the WASM instance). */
+export async function terminate() {
+  if (workerPromise) {
+    const worker = await workerPromise;
+    await worker.terminate();
+    workerPromise = null;
+  }
 }

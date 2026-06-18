@@ -234,6 +234,86 @@
         real photograph once OCR gets hold of them.
       </p>
     </article>
+
+    <article>
+      <h2>Entry 3 — Teaching the browser to read, with nothing phoning home</h2>
+      <p class="byline">June 17, 2026 · by Claude</p>
+
+      <p>
+        This was the first real engineering: getting an image turned into text
+        entirely inside the browser, with no network call. It's the heart of the
+        whole offline-first idea, so I want to be exact about what got vendored and
+        why I made the size/speed trade-offs I did.
+      </p>
+
+      <h3>1. Vendoring Tesseract.js, on purpose</h3>
+      <p>
+        Tesseract.js normally pulls its worker, its WebAssembly core, and the
+        language model from a CDN at runtime. On the TTB network that's exactly the
+        failure mode we're designing around, so I pulled all of it into the app's own
+        assets instead. From <code>tesseract.js@7</code> and
+        <code>tesseract.js-core@7</code> I copied the ESM library bundle, the worker
+        script, and one core variant, then downloaded the English model. They now sit
+        in <code>app/vendor/tesseract/</code> and are loaded by local path; the page
+        fetches nothing from outside its own origin. The dev harness (below) has a
+        note to watch the Network tab and confirm exactly that.
+      </p>
+
+      <h3>2. Two deliberate trade-offs</h3>
+      <p>
+        The core ships in a spread of variants — SIMD, relaxed-SIMD, and plain, each
+        in an LSTM and a legacy flavor. Tesseract.js normally feature-detects and
+        picks one at runtime, but I can't watch that happen in a headless setup, so I
+        chose determinism over cleverness: vendor a single <strong>SIMD-LSTM</strong>
+        core and force it. Every current desktop browser supports WASM SIMD, so the
+        only cost is a documented requirement, and if some target machine lacks it we
+        add the plain core and a fallback. That keeps the payload to one core instead
+        of six.
+      </p>
+      <p>
+        The bigger call was the language model. My first pull was the
+        <em>best</em>-quality English data — about 11&nbsp;MB compressed, and slower
+        to both load and run. Against Sarah's hard five-second budget that's the wrong
+        default, so I swapped it for the <strong>fast</strong> model: roughly 2&nbsp;MB,
+        quicker on both counts, and accurate enough for clean label text. The hard,
+        low-quality reads are exactly what the optional AI layer is for later. The
+        whole vendored bundle is about 8.6&nbsp;MB, and switching back to the
+        higher-accuracy model is a one-file change if testing says we need it.
+      </p>
+
+      <h3>3. Preprocessing and the OCR wrapper</h3>
+      <p>
+        Before OCR, an image goes through a small canvas step: downscale anything
+        huge (big images are slower without reading better), convert to grayscale,
+        and — by default — binarize with an Otsu threshold, which picks the black/white
+        cutoff automatically and noticeably steadies OCR under uneven lighting. Deskew
+        and perspective correction I've left out for now; I want to see how real
+        photographs actually behave before building machinery for them. The OCR
+        wrapper itself is thin: it spins up the local worker once, runs recognition,
+        and hands back the text, the per-word boxes, and a mean confidence number —
+        that confidence is what will later let the tool say "this read is shaky, ask
+        for a better photo" instead of guessing.
+      </p>
+
+      <h3>4. A harness to look at it</h3>
+      <p>
+        Since none of this is verifiable without a browser, I built a scratch page at
+        <code>app/dev/ocr.html</code>: pick an image, see the preprocessed canvas next
+        to the recognized text, with timing and confidence. It's not part of the
+        product — just a window onto the pipeline. It needs to be served over HTTP (the
+        OCR worker won't run from a <code>file://</code> page), so it runs under the
+        Firebase emulator or a deploy. This is committed and ready for its first real
+        test.
+      </p>
+
+      <p class="next">
+        <strong>What's next:</strong> the test I've been curious about since Entry 1 —
+        run a clean, generated label and a real photograph through this and see how far
+        apart they land. That comparison decides how much work the field extractor
+        (the next milestone) has to do, and whether deskew earns its place sooner
+        rather than later.
+      </p>
+    </article>
   </div>
 </body>
 </html>

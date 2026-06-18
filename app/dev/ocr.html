@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OCR dev harness (M2)</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 1.5rem; max-width: 64rem; line-height: 1.5; }
+    h1 { font-size: 1.4rem; }
+    canvas { max-width: 100%; border: 1px solid #ccc; background: #fff; }
+    pre { white-space: pre-wrap; background: #f6f6f6; padding: 1rem; border-radius: 6px; min-height: 6rem; }
+    .row { display: flex; gap: 2rem; flex-wrap: wrap; }
+    .col { flex: 1 1 22rem; }
+    .controls { margin: 1rem 0; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+    button { font-size: 1rem; padding: 0.4rem 1rem; }
+  </style>
+</head>
+<body>
+  <h1>OCR dev harness (M2)</h1>
+  <p>
+    Tesseract.js is served from <code>app/vendor/tesseract/</code> — nothing loads
+    from a CDN. Pick a label image and run OCR. Open the Network tab to confirm all
+    requests are same-origin (the firewall test). Serve this via the Firebase
+    emulator or a deploy; opening it from <code>file://</code> won't work because
+    the OCR worker needs HTTP.
+  </p>
+
+  <div class="controls">
+    <input type="file" id="file" accept="image/*">
+    <label><input type="checkbox" id="binarize" checked> binarize (Otsu)</label>
+    <button id="run">Run OCR</button>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <h3>Preprocessed</h3>
+      <canvas id="canvas"></canvas>
+    </div>
+    <div class="col">
+      <h3>Result</h3>
+      <p id="status">Pick an image to begin.</p>
+      <pre id="text"></pre>
+    </div>
+  </div>
+
+  <script type="module" src="./ocr.js"></script>
+</body>
+</html>

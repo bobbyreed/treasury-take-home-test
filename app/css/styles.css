@@ -1,63 +1,77 @@
-/* Accessibility-minded defaults: large text, high contrast, visible focus,
-   one obvious flow. Designed for agents across a wide range of tech comfort. */
+/* Treasury / USWDS-inspired theme. Design tokens (palette, type, header) are
+   lifted from the site's theme bundle (research/DOT/css/uswds-treasury-theme.css)
+   — that source file is reference only and is NOT imported here. Fonts use the
+   USWDS fallback stacks (no web-font fetch — firewall-safe). Accessibility-minded:
+   high contrast, visible focus, words+icons (not color alone) in results. */
 
 :root {
-  --bg: #ffffff;
-  --fg: #1a1a1a;
-  --muted: #555;
-  --accent: #0b5d8a;
-  --line: #d3d3d3;
-  --field-bg: #fafafa;
+  --font-sans: "Source Sans Pro", "Source Sans 3", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+  --font-serif: Merriweather, Georgia, Cambria, "Times New Roman", Times, serif;
 
-  --ok-bg: #e7f6ea; --ok-fg: #14692b; --ok-line: #1d7a34;
-  --minor-bg: #fff6e0; --minor-fg: #7a5400; --minor-line: #b8860b;
-  --warn-bg: #fff1e0; --warn-fg: #8a4b00; --warn-line: #c25e00;
-  --bad-bg: #fde7e7; --bad-fg: #8a1d1d; --bad-line: #b23030;
+  --bg: #ffffff;
+  --fg: #1b1b1b;          /* USWDS ink */
+  --muted: #565c65;       /* USWDS gray-cool-60 */
+  --line: #dfe1e2;        /* USWDS base-lighter */
+
+  --primary: #005ea2;     /* USWDS primary */
+  --primary-dark: #1a4480;
+  --navy: #162e51;        /* USWDS primary-darker — header */
+  --gold: #ffbe2e;        /* USWDS accent-warm */
+
+  --ok-bg: #ecf3ec; --ok-fg: #2e8540; --ok-line: #4d8055;          /* success */
+  --minor-bg: #faf3d1; --minor-fg: #8a7100; --minor-line: #e5a000; /* warning */
+  --warn-bg: #fef0c8; --warn-fg: #7a5200; --warn-line: #ffbe2e;    /* warning / low-confidence */
+  --bad-bg: #f9dede; --bad-fg: #b50909; --bad-line: #d83933;       /* error */
 }
 
 * { box-sizing: border-box; }
 html { font-size: 18px; }
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--font-sans);
   color: var(--fg);
   background: var(--bg);
   line-height: 1.5;
 }
 
-.app-header { display: flex; align-items: center; gap: 1rem; padding: 1.25rem 1.5rem; border-bottom: 2px solid var(--line); }
-.app-logo { width: 48px; height: 48px; flex: none; }
-.app-header h1 { margin: 0; font-size: 1.7rem; }
-.tagline { margin: 0.25rem 0 0; color: var(--muted); }
+/* Header — federal navy banner with a gold rule */
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem 1.5rem;
+  background: var(--navy);
+  color: #ffffff;
+  border-bottom: 4px solid var(--gold);
+}
+.app-logo { width: 52px; height: 52px; flex: none; background: #fff; border-radius: 50%; padding: 4px; }
+.app-title h1 { margin: 0; font-family: var(--font-serif); font-size: 1.55rem; font-weight: 700; }
+.tagline { margin: 0.2rem 0 0; color: #dfe1e2; }
 
 main { padding: 1.5rem; max-width: 52rem; margin: 0 auto; }
 
-:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
 
-/* --- Form --- */
-fieldset {
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  margin: 0 0 1.25rem;
-  padding: 1rem 1.25rem 1.25rem;
-}
-legend { font-weight: 700; font-size: 1.1rem; padding: 0 0.4rem; }
+/* Form */
+fieldset { border: 1px solid var(--line); border-radius: 4px; margin: 0 0 1.25rem; padding: 1rem 1.25rem 1.25rem; }
+legend { font-weight: 700; font-size: 1.1rem; padding: 0 0.4rem; color: var(--navy); }
 
 label { display: block; margin: 0.6rem 0; font-weight: 600; }
 input[type="text"], select {
   display: block;
   width: 100%;
   margin-top: 0.25rem;
-  padding: 0.6rem 0.7rem;
+  padding: 0.55rem 0.7rem;
   font-size: 1rem;
   font-weight: 400;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  background: var(--field-bg);
+  border: 1px solid var(--muted);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--fg);
 }
 input[type="file"] { display: block; margin-top: 0.4rem; font-size: 1rem; }
 .file-label { margin-bottom: 0; }
-.preview { display: block; margin-top: 0.75rem; max-width: 100%; max-height: 360px; border: 1px solid var(--line); border-radius: 6px; }
+.preview { display: block; margin-top: 0.75rem; max-width: 100%; max-height: 360px; border: 1px solid var(--line); border-radius: 4px; }
 
 .checkbox { font-weight: 400; display: flex; align-items: center; gap: 0.5rem; }
 .checkbox input { width: 1.15rem; height: 1.15rem; }
@@ -68,32 +82,28 @@ input[type="file"] { display: block; margin-top: 0.4rem; font-size: 1rem; }
 @media (max-width: 34rem) { .grid { grid-template-columns: 1fr; } }
 
 button.primary {
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 700;
-  padding: 0.7rem 1.6rem;
+  padding: 0.65rem 1.6rem;
   color: #fff;
-  background: var(--accent);
+  background: var(--primary);
   border: none;
-  border-radius: 8px;
+  border-radius: 4px;
   cursor: pointer;
 }
+button.primary:hover:not(:disabled) { background: var(--primary-dark); }
 button.primary:disabled { opacity: 0.6; cursor: progress; }
 
 .status { min-height: 1.5rem; margin: 1rem 0; color: var(--muted); font-weight: 600; }
 
-/* --- Verdict card --- */
+/* Verdict card */
 .report { margin-top: 1rem; }
-.verdict {
-  margin: 0;
-  padding: 1rem 1.25rem;
-  border-radius: 10px 10px 0 0;
-  font-size: 1.6rem;
-}
+.verdict { margin: 0; padding: 1rem 1.25rem; border-radius: 6px 6px 0 0; font-size: 1.5rem; font-weight: 700; }
 .verdict-pass { background: var(--ok-bg); color: var(--ok-fg); border: 2px solid var(--ok-line); border-bottom: none; }
 .verdict-review { background: var(--warn-bg); color: var(--warn-fg); border: 2px solid var(--warn-line); border-bottom: none; }
 .verdict-sub { margin: 0; padding: 0.5rem 1.25rem 1rem; border: 2px solid var(--line); border-top: none; border-bottom: none; color: var(--muted); }
 
-.fields { list-style: none; margin: 0; padding: 0; border: 2px solid var(--line); border-top: none; border-radius: 0 0 10px 10px; overflow: hidden; }
+.fields { list-style: none; margin: 0; padding: 0; border: 2px solid var(--line); border-top: none; border-radius: 0 0 6px 6px; overflow: hidden; }
 .field { display: flex; gap: 0.85rem; padding: 0.85rem 1.25rem; border-top: 1px solid var(--line); }
 .field-status { font-size: 1.3rem; font-weight: 700; line-height: 1.6; width: 1.4rem; text-align: center; flex: none; }
 .field-body { display: flex; flex-direction: column; gap: 0.1rem; }
@@ -102,11 +112,23 @@ button.primary:disabled { opacity: 0.6; cursor: progress; }
 .field-note { color: var(--muted); font-size: 0.92rem; }
 .field-values { color: var(--muted); font-size: 0.92rem; margin-top: 0.15rem; }
 
-.field.ok    { background: var(--ok-bg); }
-.field.ok    .field-status, .field.ok .field-verdict    { color: var(--ok-fg); }
+.field.ok { background: var(--ok-bg); }
+.field.ok .field-status, .field.ok .field-verdict { color: var(--ok-fg); }
 .field.minor { background: var(--minor-bg); }
 .field.minor .field-status, .field.minor .field-verdict { color: var(--minor-fg); }
-.field.warn  { background: var(--warn-bg); }
-.field.warn  .field-status, .field.warn .field-verdict  { color: var(--warn-fg); }
-.field.bad   { background: var(--bad-bg); }
-.field.bad   .field-status, .field.bad .field-verdict   { color: var(--bad-fg); }
+.field.warn { background: var(--warn-bg); }
+.field.warn .field-status, .field.warn .field-verdict { color: var(--warn-fg); }
+.field.bad { background: var(--bad-bg); }
+.field.bad .field-status, .field.bad .field-verdict { color: var(--bad-fg); }
+
+/* Footer — honest disclaimer now that it wears the federal look */
+.app-footer {
+  max-width: 52rem;
+  margin: 2rem auto 0;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.scaffold-note { color: var(--muted); border: 1px dashed var(--line); padding: 1rem; border-radius: 4px; }

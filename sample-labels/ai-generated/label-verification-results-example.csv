@@ -1,0 +1,21 @@
+file,beverageType,overall,brandName,classType,abv,netContents,producer,countryOfOrigin,warning,confidence
+CityCenter.png,beer,PASS,MINOR_DIFFERENCE,MINOR_DIFFERENCE,MATCH,MATCH,MINOR_DIFFERENCE,,MATCH,91
+GoldenHarvest.png,,NO_DATA,,,,,,,,93
+BlackbeardCove.png,,NO_DATA,,,,,,,,88
+HighDesert-Mezcal-Mexico.png,spirits,PASS,MATCH,MINOR_DIFFERENCE,MATCH,MATCH,MATCH,MATCH,MATCH,92
+LakesideMeadery.png,,NO_DATA,,,,,,,,92
+IslandHeat.png,,NO_DATA,,,,,,,,88
+JuniperGrove.png,,NO_DATA,,,,,,,,83
+HighlandCask.png,,NO_DATA,,,,,,,,84
+OldTomDistillery0.png,spirits,NEEDS_REVIEW,MISMATCH,MINOR_DIFFERENCE,MATCH,MISMATCH,MISMATCH,,MISSING,82
+PioneerCellars.png,,NO_DATA,,,,,,,,67
+MountainPeak.png,beer,PASS,MATCH,MATCH,MATCH,MATCH,MATCH,,MATCH,92
+OldPort.png,,NO_DATA,,,,,,,,95
+SilverCreek - tipped.png,,NO_DATA,,,,,,,,95
+SilverCreekVineyard.png,wine,NEEDS_REVIEW,MISMATCH,MISMATCH,MISMATCH,MISMATCH,MISMATCH,,MISSING,86
+PrairieDew.png,,NO_DATA,,,,,,,,93
+RioAzul.png,,NO_DATA,,,,,,,,84
+SmokyMountain.png,spirits,PASS,MINOR_DIFFERENCE,MINOR_DIFFERENCE,MATCH,MATCH,MINOR_DIFFERENCE,,MATCH,94
+TheSpicyBadger.png,,NO_DATA,,,,,,,,94
+TheMadScientist.png,,NO_DATA,,,,,,,,93
+VikingBlood-CheeryMead-135-750ml.png,wine,NEEDS_REVIEW,MATCH,MISMATCH,MISMATCH,MISMATCH,MATCH,,MATCH,92

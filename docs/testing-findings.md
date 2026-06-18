@@ -42,6 +42,25 @@ pass in the engineering-consolidation phase (IMPLEMENTATION_PLAN §12).
   a human but unreadable by OCR reports "couldn't read" rather than "does not
   match" — instead of one blunt overall confidence number.
 
+## Batch run over the gemini folder (M6 validation)
+- **Clean labels pass at scale:** the 4 clean labels with CSV rows (CityCenter,
+  HighDesert, MountainPeak, SmokyMountain) all PASSED; case-only differences
+  correctly read as MINOR_DIFFERENCE.
+- **`NO_DATA`** rows = images with no matching CSV row (the example CSV had 8
+  rows). Extend `expected-values.csv` to verify the whole set.
+- **Scene renders flagged correctly:** `OldTomDistillery0.png` and
+  `SilverCreekVineyard.png` (early bottle-in-scene images, label ~10% of frame)
+  came back NEEDS_REVIEW with most fields MISMATCH + warning MISSING. Suggest
+  moving the old scene shots to a `scene/` subfolder so the clean set is clean.
+- **Per-field-confidence boundary (key finding):** Viking Blood matched brand
+  (fuzzy), producer, and warning, but its **gold-on-crimson ABV/net and decorative
+  class line read as MISMATCH, not LOW_CONFIDENCE.** The garbled-word ratio only
+  trips on *whole-label* unreadability; a *single* unreadable field on an
+  otherwise-clean label still mismatches. Localizing confidence per field is hard
+  from OCR alone — this is the **AI-layer (M7)** case. *Possible cheap refinement
+  to evaluate:* when a structured field (ABV/net) isn't found **anywhere** in an
+  otherwise-readable label, lean toward "couldn't read" rather than mismatch.
+
 ## Matching wins to preserve
 - Token-coverage matching fixed the multi-line producer false-mismatch.
 - Fuzzy "present, not perfect" handled all-caps (Smoky Mountain) and OCR slips

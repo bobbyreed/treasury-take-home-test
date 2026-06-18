@@ -15,28 +15,11 @@ import { parseAbv, parseNetContents } from './extract.js';
 import { findInText } from './fuzzy.js';
 import { STATUS } from './status.js';
 import { CANONICAL_WARNING, LOW_CONFIDENCE_BELOW } from './constants.js';
+import { normalize, tokens, coverage } from './text.js';
 
-// Re-export for callers/tests that historically imported the warning from here.
+// Re-export for callers/tests that historically imported these from here.
 export { CANONICAL_WARNING } from './constants.js';
-
-/**
- * Normalize text for tolerant comparison: strip diacritics, unify quotes/dashes,
- * lowercase, reduce punctuation to spaces, collapse whitespace.
- * @param {string} s
- * @returns {string}
- */
-export function normalize(s) {
-  return String(s ?? '')
-    .normalize('NFKD')
-    .replace(/[̀-ͯ]/g, '') // diacritics
-    .replace(/[‘’‛′]/g, "'")
-    .replace(/[“”″]/g, '"')
-    .replace(/[–—]/g, '-')
-    .toLowerCase()
-    .replace(/[^\p{L}\p{N}]+/gu, ' ')
-    .trim()
-    .replace(/\s+/g, ' ');
-}
+export { normalize } from './text.js';
 
 const collapseWs = (s) => String(s ?? '').replace(/\s+/g, ' ').trim();
 const mk = (field, expectedValue, extractedValue, status, note) =>
@@ -121,23 +104,6 @@ export function compareNetContents(expectedNet, extractedNet = {}, ocrConfidence
     return mk('netContents', `${expMl} mL`, `${extractedNet.ml} mL`, STATUS.MATCH, '');
   }
   return mk('netContents', `${expMl} mL`, `${extractedNet.ml} mL`, STATUS.MISMATCH, 'Net contents differ');
-}
-
-function tokens(s) {
-  return normalize(s).split(' ').filter(Boolean);
-}
-
-/** Fraction of `wantTokens` present (multiset) in `text` — order-insensitive. */
-function coverage(wantTokens, text) {
-  if (!wantTokens.length) return 0;
-  const counts = new Map();
-  for (const t of tokens(text)) counts.set(t, (counts.get(t) || 0) + 1);
-  let matched = 0;
-  for (const t of wantTokens) {
-    const c = counts.get(t) || 0;
-    if (c > 0) { matched++; counts.set(t, c - 1); }
-  }
-  return matched / wantTokens.length;
 }
 
 /** Fraction of canonical warning tokens present in the extracted text. */

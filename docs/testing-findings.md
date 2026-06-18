@@ -25,10 +25,14 @@ pass in the engineering-consolidation phase (IMPLEMENTATION_PLAN §12).
 - **Large display titles were dropped** until the page-seg mode was set to AUTO
   (PSM 3). Fixed.
 
-## Performance (the 5-second budget is a hard requirement — Sarah)
-- Latency varies widely: **Smoky Mountain ~2s** (good) vs **High Desert ~7s**
-  (over budget). Needs measurement + tuning — downscale factor, PSM cost, and
-  image dimensions are the suspects.
+## Performance — target the AVERAGE, not the worst case (decision)
+- Latency varies widely: **Smoky Mountain ~2s** vs **High Desert ~7s**.
+- **Decision (Bobby):** treat Sarah's ~5-second target as the **average across a
+  representative set**, not a hard per-image cap. Complex or poor-quality images
+  will run longer, and that's acceptable — it mirrors the human workflow. We will
+  **not** aggressively optimize OCR for the slow tail: the risk of regressing the
+  accuracy we just fixed outweighs the benefit. Measure the average across the
+  full label set; only revisit if that average exceeds ~5s.
 
 ## UX requests / ideas
 - **Image preview while filling the form** so the agent can read the label as

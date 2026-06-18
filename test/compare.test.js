@@ -44,6 +44,18 @@ test('free-text: not found with poor OCR is LOW_CONFIDENCE', () => {
   assert.equal(r.status, 'LOW_CONFIDENCE');
 });
 
+test('free-text: multi-line producer with OCR noise between lines is MATCH (token coverage)', () => {
+  const text = 'Product of Mexico. Pr\nBottled by Mezcal de Oaxaca, S.A. de C.V. a AN\nImported by Border Crossings Imports, El Paso, TX 2D';
+  const expected = 'Product of Mexico. Bottled by Mezcal de Oaxaca, S.A. de C.V. Imported by Border Crossings Imports, El Paso, TX';
+  assert.equal(compareFreeText('producer', expected, text, 80).status, 'MATCH');
+});
+
+test('free-text: a different producer is not a false coverage match', () => {
+  const text = 'DISTILLED & BOTTLED BY SMOKY MOUNTAIN DISTILLERY, GATLINBURG, TN';
+  const expected = 'Distilled & Bottled by Old Tom Distillery, Lexington, KY';
+  assert.equal(compareFreeText('producer', expected, text, 85).status, 'MISMATCH');
+});
+
 // --- compareAbv -------------------------------------------------------------
 
 test('abv: equal percent is MATCH (string or number expected)', () => {

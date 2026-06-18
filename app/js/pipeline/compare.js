@@ -67,7 +67,16 @@ export function compareFreeText(field, expected, ocrText, ocrConfidence = null) 
   if (nE && normalize(text).includes(nE)) {
     return mk(field, expected, expected, 'MINOR_DIFFERENCE', 'Present; case/punctuation differs');
   }
-  // Fuzzy (tolerates OCR slips).
+  // Multi-word / multi-line values (e.g. a producer line split across rows, with
+  // OCR noise between) — match by how many expected tokens appear in the OCR
+  // text. Handles non-contiguous values and strings too long for fuzzy search.
+  const expectedTokens = tokens(expected);
+  if (expectedTokens.length >= 4) {
+    const cov = coverage(expectedTokens, text);
+    if (cov >= 0.9) return mk(field, expected, expected, 'MATCH', `Present (text coverage ${Math.round(cov * 100)}%)`);
+    if (cov >= 0.78) return mk(field, expected, expected, 'MINOR_DIFFERENCE', `Mostly present (coverage ${Math.round(cov * 100)}%)`);
+  }
+  // Fuzzy (tolerates OCR slips on shorter values).
   const fz = findInText(expected, text, { threshold: 0.6 });
   if (fz && fz.score <= 0.2) {
     return mk(field, expected, fz.value, 'MATCH', `Fuzzy match (score ${fz.score.toFixed(2)})`);
@@ -123,17 +132,22 @@ function tokens(s) {
   return normalize(s).split(' ').filter(Boolean);
 }
 
-/** Fraction of canonical warning tokens present in the extracted text (multiset). */
-export function warningCoverage(extractedText) {
-  const want = tokens(CANONICAL_WARNING);
+/** Fraction of `wantTokens` present (multiset) in `text` — order-insensitive. */
+function coverage(wantTokens, text) {
+  if (!wantTokens.length) return 0;
   const counts = new Map();
-  for (const t of tokens(extractedText)) counts.set(t, (counts.get(t) || 0) + 1);
+  for (const t of tokens(text)) counts.set(t, (counts.get(t) || 0) + 1);
   let matched = 0;
-  for (const t of want) {
+  for (const t of wantTokens) {
     const c = counts.get(t) || 0;
     if (c > 0) { matched++; counts.set(t, c - 1); }
   }
-  return want.length ? matched / want.length : 0;
+  return matched / wantTokens.length;
+}
+
+/** Fraction of canonical warning tokens present in the extracted text. */
+export function warningCoverage(extractedText) {
+  return coverage(tokens(CANONICAL_WARNING), extractedText);
 }
 
 /**

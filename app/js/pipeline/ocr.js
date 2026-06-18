@@ -17,12 +17,21 @@ let workerPromise = null;
 
 function getWorker() {
   if (!workerPromise) {
-    workerPromise = Tesseract.createWorker('eng', 1 /* LSTM_ONLY */, {
-      workerPath: VENDOR + 'worker.min.js',
-      corePath: VENDOR + 'tesseract-core-simd-lstm.wasm.js',
-      langPath: VENDOR, // directory containing eng.traineddata.gz
-      gzip: true,
-    });
+    workerPromise = (async () => {
+      const worker = await Tesseract.createWorker('eng', 1 /* LSTM_ONLY */, {
+        workerPath: VENDOR + 'worker.min.js',
+        corePath: VENDOR + 'tesseract-core-simd-lstm.wasm.js',
+        langPath: VENDOR, // directory containing eng.traineddata.gz
+        gzip: true,
+      });
+      // Auto page segmentation. The worker default treats the whole label as one
+      // uniform block and drops large display lines (brand, class/type); PSM 3
+      // (AUTO) does proper layout analysis and picks those titles up.
+      await worker.setParameters({
+        tessedit_pageseg_mode: (Tesseract.PSM && Tesseract.PSM.AUTO) || '3',
+      });
+      return worker;
+    })();
   }
   return workerPromise;
 }

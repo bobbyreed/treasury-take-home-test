@@ -17,7 +17,9 @@ image generator (one at a time). Image models often garble long text — keep th
 renders where the text (especially the warning) came out clean; the imperfect
 ones make honest robustness samples. Save outputs into
 `sample-labels/ai-generated/<tool>/` and we'll pair them to expected values via
-`expected-values.csv`.
+`expected-values.csv`. For the degraded twin of each label, swap the STYLE block
+for the **DISTORTED STYLE block** below (same WARNING block and numbered prompt)
+— giving 25 clean + 25 distorted matched pairs.
 
 ---
 
@@ -39,6 +41,24 @@ ones make honest robustness samples. Save outputs into
 > drink alcoholic beverages during pregnancy because of the risk of birth
 > defects. (2) Consumption of alcoholic beverages impairs your ability to drive a
 > car or operate machinery, and may cause health problems.
+
+### DISTORTED STYLE block (alternative — for the degraded "real-world" pair)
+
+Use this **instead of** the STYLE block (keep the same WARNING block and the same
+numbered prompt) to generate a degraded twin of the same label — for testing the
+"reject and request a better image" / low-confidence path and robustness.
+
+> Show this exact label as a **real-world phone photo taken in poor conditions**,
+> not a clean scan. The label is on or around a bottle or can. Keep all the same
+> text content, but capture it imperfectly: pick **two or three at random** from —
+> photographed at an **angle / perspective tilt** (roughly 10–35°); the label
+> **curved** around the bottle; **glare or a bright specular reflection** across
+> part of it; **dim, uneven, or harsh side lighting** with shadows; **slight
+> motion or out-of-focus blur**; **off-center framing** with part of an edge
+> cropped; a **hand or cluttered background** partly visible. Vary the combination
+> each time. The text should stay *mostly legible to a human* but clearly harder
+> to read than the clean version. Make it a realistic, natural photo — not
+> stylized.
 
 ---
 

@@ -119,16 +119,15 @@ interview evidence.
 | Standalone (no COLA) | US-13 | ✅ Done |
 | Accessible single-page flow + image preview | US-8 | ✅ Done |
 | ~5s latency | US-7 | ◐ Partial — avg target accepted; slow tail OK (see testing-findings) |
-| Low-confidence → "request better image" | US-6 | ◐ Partial — uses overall confidence; **per-field** confidence planned |
+| Low-confidence → "request better image" (per-field) | US-6 | ✅ Done — garbled-word ratio lowers effective confidence (`effectiveConfidence`) |
 | Batch mode | US-9 | ⬜ Planned (M6) |
 | Optional AI verification (hard fonts/contrast) | US-10, US-6 | ⬜ Planned (M7) |
 | Robustness test set (degraded images) | US-10 | ⬜ To create (small, derived from the 25) |
 
 ## Gaps (unmet or partial needs)
-1. **Per-field "unreadable vs wrong" (US-6).** Today a legible-but-unreadable
-   field (decorative font, low contrast) can read as "does not match." Need
-   per-field confidence. *This is the parked behavioral change — highest-value
-   correctness fix.*
+1. ~~**Per-field "unreadable vs wrong" (US-6).**~~ **Resolved** — `extract` computes
+   a garbled-word ratio and `effectiveConfidence` routes a not-found field on a
+   garbled read to LOW_CONFIDENCE instead of a false MISMATCH.
 2. **Warning *bold / font-size* (US-2).** Jenny also requires the warning be
    **bold** and not in tiny font. OCR text can't judge weight/size — documented
    limitation; partially addressable only by the AI layer.
@@ -145,9 +144,7 @@ interview evidence.
   *lowest* priority and isolated, not a core dependency (respects US-11).
 
 ## Recommended priority for resuming feature work
-1. **Per-field confidence (US-6)** — small, high-value correctness fix; unblocks
-   honest behavior on hard labels and the degraded set. *(The parked behavioral
-   change — do this first.)*
-2. **Batch mode, M6 (US-9)** — the biggest unmet stakeholder ask (Sarah/Janet).
-3. **Degraded test set (US-10)** — cheap; enables robustness validation.
+1. ~~Per-field confidence (US-6)~~ — **done.**
+2. **Batch mode, M6 (US-9)** — the biggest unmet stakeholder ask (Sarah/Janet). ← next
+3. **Degraded test set (US-10)** — cheap; enables robustness validation (in progress).
 4. **Optional AI layer, M7 (US-10)** — last; isolated booster for the hard cases.

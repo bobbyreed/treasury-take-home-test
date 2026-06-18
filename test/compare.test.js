@@ -106,3 +106,20 @@ test('warning: reworded/short is MISMATCH', () => {
 test('warning: missing is MISSING', () => {
   assert.equal(compareWarning({ warningText: null, allCaps: false }).status, 'MISSING');
 });
+
+test('free-text: empty expected → MISSING', () => {
+  assert.equal(compareFreeText('brandName', '', 'anything').status, 'MISSING');
+});
+
+test('free-text: single-typo fuzzy match → MATCH', () => {
+  const r = compareFreeText('brandName', 'Silver Creek Vineyard', 'Estate\nSilver Creek Vinyard\n750 mL');
+  assert.equal(r.status, 'MATCH');
+});
+
+test('net contents: unreadable with low confidence → LOW_CONFIDENCE', () => {
+  assert.equal(compareNetContents('750 mL', { ml: null }, 30).status, 'LOW_CONFIDENCE');
+});
+
+test('net contents: unreadable with good confidence → MISMATCH', () => {
+  assert.equal(compareNetContents('750 mL', { ml: null }, 85).status, 'MISMATCH');
+});

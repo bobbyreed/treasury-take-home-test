@@ -20,6 +20,26 @@ export function initSingle(root) {
   const btn = byId('verifyBtn');
   if (!form) return;
 
+  // Live preview of the chosen label, so the agent can read it while typing the
+  // application values.
+  const fileInput = byId('labelImage');
+  const preview = byId('preview');
+  let previewUrl = null;
+  if (fileInput && preview) {
+    fileInput.addEventListener('change', () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+      const f = fileInput.files[0];
+      if (f) {
+        previewUrl = URL.createObjectURL(f);
+        preview.src = previewUrl;
+        preview.hidden = false;
+      } else {
+        preview.hidden = true;
+        preview.removeAttribute('src');
+      }
+    });
+  }
+
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
 

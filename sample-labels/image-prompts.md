@@ -1,7 +1,7 @@
 # Image-generation prompts (controlled label set)
 
 25 prompts, one per profile in
-[`ai-generated/gemini/labelIdeas.md`](./ai-generated/gemini/labelIdeas.md).
+[`ai-generated/labelIdeas.md`](./ai-generated/labelIdeas.md).
 
 **Strategy:** these target the *core happy path* — a label that **fills the
 frame**, flat and straight-on (like a scan), with every required field legible.

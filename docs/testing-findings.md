@@ -48,10 +48,13 @@ pass in the engineering-consolidation phase (IMPLEMENTATION_PLAN §12).
   correctly read as MINOR_DIFFERENCE.
 - **`NO_DATA`** rows = images with no matching CSV row (the example CSV had 8
   rows). Extend `expected-values.csv` to verify the whole set.
-- **Scene renders flagged correctly:** `OldTomDistillery0.png` and
-  `SilverCreekVineyard.png` (early bottle-in-scene images, label ~10% of frame)
-  came back NEEDS_REVIEW with most fields MISMATCH + warning MISSING. Suggest
-  moving the old scene shots to a `scene/` subfolder so the clean set is clean.
+- **Scene renders flagged correctly:** the early bottle-in-scene images (label
+  ~10% of frame) came back NEEDS_REVIEW with most fields MISMATCH + warning
+  MISSING. **Done:** the corpus was reorganized into `clean/` (18), `distorted/`
+  (24), and `scene/` (5); distorted twins were renamed to share their clean
+  twin's basename, and `expected-values.csv` was extended to one row per product
+  (24) keyed by basename so it pairs across all three folders. See
+  `sample-labels/README.md`. (Filenames in this doc predate that rename.)
 - **Per-field-confidence boundary (key finding):** Viking Blood matched brand
   (fuzzy), producer, and warning, but its **gold-on-crimson ABV/net and decorative
   class line read as MISMATCH, not LOW_CONFIDENCE.** The garbled-word ratio only

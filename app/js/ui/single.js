@@ -1,13 +1,25 @@
 /**
  * Single-label flow (M5): read the form, run the offline pipeline
  * (preprocess → OCR → extract → compare), and render the verdict card.
- * Browser-only.
+ *
+ * M7 adds an OPTIONAL "Double-check with AI" step: it sends the image + OCR
+ * text to the verifyLabel function and re-runs the SAME comparison engine on
+ * the AI's reading. It's strictly additive — if it's offline/unreachable the
+ * offline verdict already stands. Browser-only.
  */
 import { preprocess } from '../pipeline/preprocess.js';
 import { recognize } from '../pipeline/ocr.js';
 import { extractFields } from '../pipeline/extract.js';
 import { buildReport } from '../pipeline/report.js';
+import { aiFieldsToExtracted, diffFields } from '../pipeline/aiVerify.js';
 import { renderReport } from './render.js';
+import { fileToPayload, requestVerify } from './verifyClient.js';
+
+const FIELD_LABEL = {
+  brandName: 'brand name', classType: 'class/type', abv: 'alcohol content',
+  netContents: 'net contents', producer: 'producer', countryOfOrigin: 'country of origin',
+  warning: 'government warning',
+};
 
 /**
  * @param {Document|HTMLElement} root - element with getElementById (pass document)
@@ -84,6 +96,10 @@ export function initSingle(root) {
       resultEl.appendChild(card);
       const banner = card.querySelector('.verdict');
       if (banner) banner.focus();
+
+      appendAiPanel(resultEl, {
+        file, ocrText: ocr.text, expected, beverageType, isImport, offlineReport: report,
+      });
     } catch (err) {
       const message = err && err.message ? err.message : String(err);
       statusEl.textContent = `Sorry — couldn't read this label: ${message}. Try a clearer, closer image.`;
@@ -91,4 +107,97 @@ export function initSingle(root) {
       btn.disabled = false;
     }
   });
+}
+
+/**
+ * Render the optional "Double-check with AI" panel below the offline verdict.
+ * @param {HTMLElement} container
+ * @param {{file: File, ocrText: string, expected: object, beverageType: string,
+ *          isImport: boolean, offlineReport: object}} ctx
+ */
+function appendAiPanel(container, ctx) {
+  const panel = document.createElement('section');
+  panel.className = 'ai-panel';
+
+  const action = document.createElement('button');
+  action.type = 'button';
+  action.className = 'ai-button';
+  action.textContent = 'Double-check with AI (online)';
+
+  const note = document.createElement('p');
+  note.className = 'ai-note';
+  note.textContent = 'Optional: sends the image to a server-side model for a second reading. '
+    + 'The offline result above does not depend on it.';
+
+  const out = document.createElement('div');
+  out.className = 'ai-result';
+  out.setAttribute('aria-live', 'polite');
+
+  panel.append(action, note, out);
+  container.appendChild(panel);
+
+  action.addEventListener('click', async () => {
+    action.disabled = true;
+    out.innerHTML = '';
+    note.textContent = 'Asking the AI to read the label…';
+    try {
+      const image = await fileToPayload(ctx.file);
+      const resp = await requestVerify({
+        image, ocrText: ctx.ocrText, expected: ctx.expected, beverageType: ctx.beverageType,
+      });
+
+      const aiExtracted = aiFieldsToExtracted(resp.extracted || {}, resp.confidence);
+      const aiReport = buildReport({
+        labelId: ctx.file.name, expected: ctx.expected, extracted: aiExtracted,
+        beverageType: ctx.beverageType, isImport: ctx.isImport, usedAI: true,
+      });
+      const deltas = diffFields(ctx.offlineReport, aiReport);
+
+      note.textContent = Number.isFinite(resp.confidence)
+        ? `AI reading · confidence ${Math.round(resp.confidence)}%`
+        : 'AI reading';
+
+      const heading = document.createElement('h3');
+      heading.className = 'ai-heading';
+      heading.tabIndex = -1;
+      heading.textContent = 'AI verification';
+      out.appendChild(heading);
+      out.appendChild(renderDeltas(deltas, resp.notes));
+      out.appendChild(renderReport(aiReport));
+      heading.focus();
+    } catch (err) {
+      note.textContent = '';
+      out.appendChild(renderUnavailable(err && err.message ? err.message : String(err)));
+      action.disabled = false; // allow a retry (e.g. transient network)
+    }
+  });
+}
+
+function renderDeltas(deltas, notes) {
+  const p = document.createElement('p');
+  p.className = 'ai-deltas';
+  if (!deltas.length) {
+    p.textContent = 'The AI reading agrees with the offline result on every field.';
+  } else {
+    const list = deltas
+      .map((d) => `${FIELD_LABEL[d.field] || d.field} (${d.before} → ${d.after})`)
+      .join(', ');
+    p.textContent = `AI changed ${deltas.length} field${deltas.length > 1 ? 's' : ''}: ${list}.`;
+  }
+  if (notes) {
+    const small = document.createElement('span');
+    small.className = 'ai-model-note';
+    small.textContent = ` Note: ${notes}`;
+    p.appendChild(small);
+  }
+  return p;
+}
+
+function renderUnavailable(message) {
+  const p = document.createElement('p');
+  p.className = 'ai-unavailable';
+  p.textContent = `AI double-check unavailable — ${message}. `
+    + 'This is expected offline or on a network that blocks the model endpoint; '
+    + 'the offline verdict above still stands.';
+  return p;
 }

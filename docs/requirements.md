@@ -120,9 +120,9 @@ interview evidence.
 | Accessible single-page flow + image preview | US-8 | ✅ Done |
 | ~5s latency | US-7 | ◐ Partial — avg target accepted; slow tail OK (see testing-findings) |
 | Low-confidence → "request better image" (per-field) | US-6 | ✅ Done — garbled-word ratio lowers effective confidence (`effectiveConfidence`) |
-| Batch mode | US-9 | ⬜ Planned (M6) |
-| Optional AI verification (hard fonts/contrast) | US-10, US-6 | ⬜ Planned (M7) |
-| Robustness test set (degraded images) | US-10 | ⬜ To create (small, derived from the 25) |
+| Batch mode | US-9 | ✅ Done (M6) — worker pool, results table, CSV export |
+| Optional AI verification (hard fonts/contrast) | US-10, US-6 | ✅ Done (M7) — `verifyLabel` (Sonnet 4.6, vision); offline path independent |
+| Robustness test set (degraded images) | US-10 | ✅ Done — `sample-labels/ai-generated/distorted/` (24 twins) |
 
 ## Gaps (unmet or partial needs)
 1. ~~**Per-field "unreadable vs wrong" (US-6).**~~ **Resolved** — `extract` computes
@@ -131,9 +131,9 @@ interview evidence.
 2. **Warning *bold / font-size* (US-2).** Jenny also requires the warning be
    **bold** and not in tiny font. OCR text can't judge weight/size — documented
    limitation; partially addressable only by the AI layer.
-3. **Batch (US-9).** Not yet built — M6.
-4. **Robustness on degraded images (US-10).** Needs the small degraded set + the
-   AI layer; depends on US-6 to fail gracefully.
+3. ~~**Batch (US-9).**~~ **Resolved** — M6.
+4. ~~**Robustness on degraded images (US-10).**~~ **Resolved** — the distorted
+   twin set plus the M7 AI booster cover the hard cases; US-6 fails gracefully.
 
 ## Over-builds (features no story strictly requires)
 - **Treasury/USWDS restyle** — presentation polish. Not required by a story, but
@@ -145,6 +145,8 @@ interview evidence.
 
 ## Recommended priority for resuming feature work
 1. ~~Per-field confidence (US-6)~~ — **done.**
-2. **Batch mode, M6 (US-9)** — the biggest unmet stakeholder ask (Sarah/Janet). ← next
-3. **Degraded test set (US-10)** — cheap; enables robustness validation (in progress).
-4. **Optional AI layer, M7 (US-10)** — last; isolated booster for the hard cases.
+2. ~~Batch mode, M6 (US-9)~~ — **done.**
+3. ~~Degraded test set (US-10)~~ — **done** (24 distorted twins).
+4. ~~Optional AI layer, M7 (US-10)~~ — **done**; isolated booster for the hard cases.
+
+Remaining feature milestones: **M8 (hardening & a11y)**, **M9 (README, finalize, deploy)**.

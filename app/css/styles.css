@@ -135,6 +135,22 @@ button.primary:disabled { opacity: 0.6; cursor: progress; }
 
 .scaffold-note { color: var(--muted); border: 1px dashed var(--line); padding: 1rem; border-radius: 4px; }
 
+/* Optional online AI double-check (M7) — visually distinct from the offline verdict */
+.ai-panel { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 2px dashed var(--line); }
+.ai-button {
+  font-size: 1rem; font-weight: 700; padding: 0.55rem 1.2rem;
+  color: var(--primary); background: #fff; border: 1px solid var(--primary);
+  border-radius: 4px; cursor: pointer;
+}
+.ai-button:hover:not(:disabled) { background: #e1e7ef; }
+.ai-button:disabled { opacity: 0.6; cursor: progress; }
+.ai-note { color: var(--muted); font-size: 0.9rem; margin: 0.5rem 0 0; }
+.ai-result { margin-top: 1rem; }
+.ai-heading { margin: 0 0 0.5rem; font-family: var(--font-serif); color: var(--navy); }
+.ai-deltas { margin: 0 0 0.75rem; font-weight: 600; }
+.ai-model-note { font-weight: 400; color: var(--muted); }
+.ai-unavailable { color: var(--warn-fg); background: var(--warn-bg); border: 1px solid var(--warn-line); padding: 0.75rem 1rem; border-radius: 4px; }
+
 /* In-app mode nav */
 .app-nav { display: flex; gap: 0.25rem; padding: 0.5rem 1.5rem; background: #f0f0f0; border-bottom: 1px solid var(--line); }
 .app-nav a { padding: 0.4rem 0.9rem; border-radius: 4px; color: var(--primary); font-weight: 700; text-decoration: none; }

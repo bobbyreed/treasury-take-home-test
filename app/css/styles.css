@@ -45,6 +45,8 @@ body {
   border-bottom: 4px solid var(--gold);
 }
 .app-logo { width: 52px; height: 52px; flex: none; background: #fff; border-radius: 50%; padding: 4px; }
+
+.app-title { display: flex; flex-direction: column; justify-content: center; }
 .app-title h1 { margin: 0; font-family: var(--font-serif); font-size: 1.55rem; font-weight: 700; }
 .tagline { margin: 0.2rem 0 0; color: #dfe1e2; }
 

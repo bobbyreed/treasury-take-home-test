@@ -26,6 +26,11 @@
 
 * { box-sizing: border-box; }
 
+/* The `hidden` attribute must win over component display rules (e.g. .preview is
+   display:block, .preview-placeholder is display:flex) — otherwise a hidden,
+   src-less preview shows as a broken image and the placeholder never hides. */
+[hidden] { display: none !important; }
+
 /* Respect a user's reduced-motion preference (tour ring, smooth scrolls, hovers). */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

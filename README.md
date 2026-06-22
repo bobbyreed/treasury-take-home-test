@@ -1,4 +1,4 @@
-# TTB Alcohol-Label Verification — Prototype
+# TTB Alcohol-Label Verification
 
 A tool to augment human checks on alcohol-beverage labels for compliance.
 
@@ -9,8 +9,8 @@ A tool to augment human checks on alcohol-beverage labels for compliance.
 
 Build journal (separate site): https://treasury-take-home-test-blog.web.app
 
-> A prototype for evaluation only — not an official TTB system. It works in your
-> browser and stores nothing.
+> For evaluation only — not an official TTB system. It works in your browser and
+> stores nothing.
 
 ## What it does
 
@@ -64,7 +64,7 @@ Built from the stakeholder interviews in
 Full feature → user-story mapping is in
 [`docs/requirements.md`](./docs/requirements.md).
 
-## Run it locally (optional)
+## Run it locally (Not Advised)
 
 You don't need this to try the tool — the deployed app above is the working
 version. For development, it's plain HTML/CSS/JS with **no build step**:
@@ -102,7 +102,7 @@ firebase deploy        # app + blog + function (see .firebaserc / firebase.json)
 - Full-scene photos (a bottle on a shelf) read poorly; clear, label-filling
   images work best.
 - The sample labels are AI-generated, fictional products.
-- It's a standalone prototype: no storage, not connected to COLA.
+- It's standalone: no storage, not connected to COLA.
 
 More detail — including a measured comparison of the "clean up image" option — is
 in [`docs/testing-findings.md`](./docs/testing-findings.md) and the other

@@ -1,58 +1,179 @@
-# Treasury Take-Home — AI-Powered Alcohol Label Verification
+# TTB Alcohol-Label Verification — Prototype
 
-Prototype that verifies TTB alcohol-beverage labels against application data.
-**Offline-first** recognition — HTML-canvas preprocessing + Tesseract.js OCR +
-heuristic field extraction + deterministic comparison with beverage-specific
-rules — with an **optional online** Claude Sonnet 4.6 verification layer.
+A prototype that checks an alcohol-beverage label against the data an applicant
+entered, the way a TTB compliance agent does by eye today: does the brand,
+class/type, alcohol content, net contents, producer, country of origin (for
+imports), and the **government health warning** on the label match the
+application?
 
-The offline core is deliberate: TTB's network blocks outbound AI endpoints, so
-the tool must work standalone and treat the LLM as a booster, not a dependency.
+It is **offline-first**: recognition and the pass / needs-review verdict run
+entirely in the browser, with **no network**. An **optional** online step can ask
+Claude for a second reading of hard labels, but the tool is fully correct without
+it — by design.
 
-**Status:** in development. Planning docs in [`docs/`](./docs):
-- [PLAN.md](./docs/PLAN.md) — product & architecture plan
-- [diagrams.md](./docs/diagrams.md) — UML / architecture diagrams
-- [IMPLEMENTATION_PLAN.md](./docs/IMPLEMENTATION_PLAN.md) — build plan & milestones
+**Deployed app:** https://treasury-take-home-test.web.app
+**Build journal (separate site):** https://treasury-take-home-test-blog.web.app
 
-A build journal, authored as the project progresses, lives in [`blog/`](./blog).
+> Prototype for evaluation only — **not** an official TTB system. It processes
+> images in memory and stores nothing.
 
-Setup / run / deploy instructions will be completed here at the deploy milestone.
+## Why offline-first
+
+Three things from the discovery interviews drove the architecture:
+
+- **The firewall.** TTB's network blocks outbound traffic to many domains; a prior
+  vendor's ML features "half died" when its endpoints were blocked. So the core
+  cannot depend on a cloud API.
+- **Speed.** A 30–40s vendor tool went unused — "if we can't get results back in
+  about 5 seconds, nobody's going to use it." Local OCR keeps the round trip
+  short and predictable.
+- **No PII / no storage.** Prototype scope: nothing sensitive is persisted, which
+  is trivially true when everything happens in the browser tab.
+
+The optional AI layer exists only for the hard cases the interviewees flagged
+(ornate fonts, glare, bad angles) and is isolated so its absence changes nothing
+about the core verdict.
+
+## What's in it
+
+Four screens, linked from the top nav:
+
+| Screen | What it does |
+|---|---|
+| **Single label** | Upload one label, enter the application values, get a per-field PASS / NEEDS REVIEW verdict. Optional "Double-check with AI" button. |
+| **Batch** | Upload many labels + a CSV of expected values (paired by filename); a worker pool runs them with a progress bar, a needs-review filter, and CSV export. For peak-season importer dumps. |
+| **Instructions** | A guided coachmark tour laid over the *real* single-label screen — you can type and click as it explains each control. |
+| **Guided practice** | An 18-level trainer over the sample labels: enter or judge the application values, run the real checker, and make the approve / request-review call. Progress saves locally. |
+
+## Quick start
+
+The app is plain HTML/CSS/JS with **no build step**. Serve the `app/` folder over
+HTTP (ES modules don't load from `file://`):
+
+```bash
+npx serve app          # or: python3 -m http.server -d app 8080
+# then open the printed URL
+```
+
+The first label read also downloads the vendored OCR engine (WASM + English
+data, both shipped in `app/vendor/` — no CDN), so it takes a few seconds; later
+reads are faster. Everything after that works with the network off.
+
+### Tests
+
+```bash
+npm test               # node --test — pure logic: rules, comparison, extraction,
+                       # CSV, the practice curriculum, the AI client's error paths
+npm run coverage       # same, with V8 coverage
+```
+
+105 tests, no external dependencies.
+
+## The optional AI layer (setup)
+
+The "Double-check with AI" button POSTs the image + the OCR text to a Firebase
+Cloud Function (`functions/index.js`) that makes one call to **Claude Sonnet 4.6**
+(vision, forced structured output). The function reads the label *cold* — it is
+never told the expected values — and its reading is poured back through the
+**same** comparison engine the offline path uses, so there is one definition of
+"match." The UI then shows which fields the second reading changed.
+
+The API key is a **server-side secret**, never in the browser or the repo:
+
+```bash
+firebase functions:secrets:set ANTHROPIC_API_KEY
+cd functions && npm install && cd ..
+firebase deploy --only functions
+```
+
+If the call fails — offline, or on a network that blocks the endpoint — the
+button says so and the offline verdict stands. (The request also self-aborts
+after 30s so it can't hang.)
+
+## Deploy
+
+Firebase Hosting, two targets (app + the build-journal blog), plus the function:
+
+```bash
+firebase deploy                       # everything
+firebase deploy --only hosting:app    # just the app
+```
+
+Targets and project are wired in `.firebaserc` / `firebase.json`.
+
+## Approach & key decisions
+
+- **Pipeline:** image → canvas preprocess (grayscale, optional Otsu binarize) →
+  Tesseract.js OCR → heuristic field extraction → a deterministic, unit-tested
+  comparison engine → verdict. The comparison engine is pure and the bulk of the
+  tests live there.
+- **Three ideas of "match", not one.** Free-text fields use normalization + fuzzy
+  tolerance (so Dave's `STONE'S THROW` vs `Stone's Throw` is a *minor difference*,
+  not a failure); ABV and net contents are parsed to numbers/units and compared
+  numerically; the government warning is checked for an all-caps `GOVERNMENT
+  WARNING:` lead-in plus near-complete token coverage of the canonical statement.
+- **"Couldn't read" ≠ "wrong."** A garbled-word ratio lowers a field's effective
+  confidence so an unreadable field surfaces as *couldn't read — try a clearer
+  image* (matching the human "reject and request a better image" workflow) rather
+  than a false mismatch.
+- **Fixed required-field set.** Every label requires brand, class/type, ABV, net
+  contents, producer, and the warning; imports also require country of origin. An
+  earlier per-beverage-type variant was removed — it added a form field and a code
+  branch without changing any outcome a reviewer cares about.
+- **Accessibility:** one top-to-bottom flow, large targets, high contrast,
+  keyboard-navigable, verdicts communicated with words + icon (never color
+  alone), and `prefers-reduced-motion` honored.
+
+### Tools
+
+Vanilla ES modules (no framework/bundler) · [Tesseract.js](https://tesseract.projectnaptha.com/)
+(WASM OCR, vendored) · [Fuse.js](https://fusejs.io/) (fuzzy matching, vendored) ·
+Firebase Hosting + Cloud Functions · `@anthropic-ai/sdk` (Claude Sonnet 4.6) ·
+Node's built-in test runner. USWDS-inspired styling, no web-font fetch.
+
+### Assumptions & trade-offs
+
+- Targeted at clean, label-filling images (what an agent would attach). Full-scene
+  bottle photos and badly-shot images degrade gracefully to "couldn't read" rather
+  than guessing.
+- The warning is verified by coverage, not a literal character match (OCR is
+  lossy); font weight/size can't be judged from OCR text — a documented limitation
+  the AI layer partially addresses.
+- The sample labels are AI-generated fictional products (see `sample-labels/`).
+- `~5s` is an average target across a representative set, not a hard per-image cap.
 
 ## Limitations & known issues
 
-Observed while testing real generated labels. The offline OCR (Tesseract) is the
-source of most of these; the optional AI vision layer is intended to cover the
-hard cases.
+- **Decorative / 3-D display fonts** (e.g. a carved runic title) defeat the offline
+  OCR; body text on the same label reads fine. These are the cases for the AI layer.
+- **Low-contrast colored text** (gold on dark crimson) reads poorly; the "clean up
+  image" binarize step helps some labels and hurts others, so it's a toggle.
+- **Full-scene product photos** read the background, not the label; controlled,
+  label-filling images work best.
+- **Warning font weight/size** can't be judged from OCR text.
+- **The AI layer needs outbound network** — the part TTB's firewall blocks. Optional
+  by design; the offline core stands alone.
+- **Prototype scope:** no persistence; not integrated with COLA. The Treasury/TTB
+  mark is presentation only and implies no endorsement.
 
-- **Decorative / 3-D display fonts are unreadable.** Ornate display type — e.g.
-  the carved runic "Viking Blood" title — defeats the offline OCR entirely (it
-  isn't trained on such fonts), even with no preprocessing. Body text on the same
-  label reads fine. These are exactly the cases for the optional AI layer.
-- **Low-contrast colored text is hard.** Gold text on a dark crimson background
-  (e.g. a stylized "13.5% VOL.") has low *luminance* contrast and reads poorly;
-  the optional "clean up image" step (binarization) helps some labels and hurts
-  others, so it's a toggle rather than always-on.
-- **Full-scene product photos read poorly.** When the label is a small part of a
-  larger photo (a bottle on a shelf), OCR mostly reads the background. Controlled,
-  label-filling images work best. Imperfect photos (angle, glare, lighting) are a
-  stretch per the brief; the tool flags low confidence and asks for a clearer
-  image rather than guessing — matching the current human "reject and request a
-  better image" workflow.
-- **"Unreadable" vs "wrong" is coarse.** The verdict currently uses an overall OCR
-  confidence number, so a field that is legible to a human but in a font the OCR
-  can't read may show as "does not match" rather than "couldn't read." Per-field
-  confidence is a planned improvement.
-- **The warning check is coverage-based, not literal.** Because OCR is lossy, the
-  government warning is verified by an all-caps lead-in plus near-complete token
-  coverage of the canonical statement — not an exact character match. Font weight
-  and size can't be judged from OCR text.
-- **The AI layer needs outbound network** — the part TTB's firewall blocks. It is
-  optional by design; the offline core stands alone.
-- **Prototype scope.** No persistence of label images or PII; not integrated with
-  COLA. The TTB/Treasury logo is used for presentation only — this is a prototype,
-  **not an official TTB system**, and its use here does not imply endorsement.
-
-## Tests
+## Repository layout
 
 ```
-npm test        # node --test (pure logic: rules, comparison, parsers)
+app/            the application (static; deployed as the "app" hosting target)
+  js/pipeline/  pure recognition + comparison logic (unit-tested)
+  js/ui/        DOM glue: single, batch, instructions tour, guided practice
+  js/practice/  the guided-practice curriculum (pure data)
+  vendor/       Tesseract + Fuse, vendored (no CDN)
+  practice/     downsized sample images served for guided practice
+functions/      the optional verifyLabel Cloud Function
+sample-labels/  AI-generated test labels + expected-values.csv
+docs/           plan, architecture review, requirements/traceability, findings
+blog/           build journal (separate hosting target; not linked from the app)
+test/           node --test suites
 ```
+
+More detail in [`docs/`](./docs): [PLAN.md](./docs/PLAN.md),
+[requirements.md](./docs/requirements.md) (user stories + traceability),
+[architecture-review.md](./docs/architecture-review.md),
+[testing-findings.md](./docs/testing-findings.md),
+[diagrams.md](./docs/diagrams.md).

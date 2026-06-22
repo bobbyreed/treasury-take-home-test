@@ -3,6 +3,11 @@
 > Draft v1 for review. These reflect the **offline-first** architecture in
 > [`PLAN.md`](./PLAN.md): a client-side recognition pipeline that works with no
 > network, plus an **optional online LLM verification** layer.
+>
+> **Planning snapshot** — drawn before two changes shipped: `beverageType` (and the
+> per-beverage rule set) was removed in favor of a fixed required-field set, and an
+> Instructions + Guided Practice training module was added. The boxes/flows below
+> are otherwise accurate; see the [README](../README.md) for the shipped shape.
 
 ---
 

@@ -4,6 +4,12 @@
 > concrete, sequenced plan: directory layout, module contracts, milestones with
 > acceptance criteria, the exact `firebase init` configuration, and the testing
 > approach. **No code is written until this plan is agreed.**
+>
+> **Planning snapshot.** Two things changed in the build: the per-beverage-type
+> rule set became a fixed required-field set (no `beverageType`), and an
+> Instructions + Guided Practice training module was added. The
+> [README](../README.md) and [`requirements.md`](./requirements.md) reflect what
+> shipped.
 
 ## 1. Principles
 

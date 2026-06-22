@@ -4,6 +4,12 @@
 > recognition** with an **optional online LLM verification layer**. Companion UML
 > diagrams: [`diagrams.md`](./diagrams.md).
 >
+> **Planning snapshot.** This captures the original plan. Some details changed as
+> the prototype was built — most notably the per-beverage-type rule set was
+> dropped for a fixed required-field set (see [`requirements.md`](./requirements.md)
+> US-3). For what actually shipped, the [README](../README.md) and `requirements.md`
+> are authoritative.
+>
 > Changes from v1: pivoted from LLM-first to a real client-side OCR/heuristic
 > pipeline that works standalone; LLM is now an optional online verifier, not the
 > core. Model fixed to Sonnet 4.6. Comparison stays client-side. Beverage-specific

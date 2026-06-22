@@ -39,8 +39,12 @@ const STEPS = [
   {
     target: '#binarize',
     title: '2. Clean up the image',
-    body: 'Leave this on. It boosts contrast so the reader sees the text more '
-      + 'reliably — especially on photos with glare or uneven lighting.',
+    body: 'On by default, and a good choice for most real photos: it boosts '
+      + 'contrast so the reader copes with glare and uneven lighting. The exception '
+      + 'is colored, low-contrast text — like Viking Blood’s gold lettering on dark '
+      + 'crimson — where cleanup can merge the colors together. If a field comes '
+      + 'back “couldn’t read,” try turning this off and re-running, or use the AI '
+      + 'double-check.',
   },
   {
     target: '.import-checkbox',

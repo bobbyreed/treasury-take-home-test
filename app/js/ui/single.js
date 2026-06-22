@@ -32,6 +32,19 @@ export function initSingle(root) {
   const btn = byId('verifyBtn');
   if (!form) return;
 
+  // Country of origin only applies to imports — keep it disabled (and cleared)
+  // until "Imported" is checked, so the field can't carry a stale value.
+  const importBox = byId('isImport');
+  const countryInput = byId('countryOfOrigin');
+  if (importBox && countryInput) {
+    const syncCountry = () => {
+      countryInput.disabled = !importBox.checked;
+      if (!importBox.checked) countryInput.value = '';
+    };
+    importBox.addEventListener('change', syncCountry);
+    syncCountry();
+  }
+
   // Live preview of the chosen label, so the agent can read it while typing the
   // application values.
   const fileInput = byId('labelImage');
@@ -69,7 +82,6 @@ export function initSingle(root) {
       producer: byId('producer').value.trim(),
       countryOfOrigin: byId('countryOfOrigin').value.trim(),
     };
-    const beverageType = byId('beverageType').value;
     const isImport = byId('isImport').checked;
     const binarize = byId('binarize').checked;
 
@@ -86,7 +98,7 @@ export function initSingle(root) {
 
       statusEl.textContent = 'Checking against the application values…';
       const extracted = extractFields(ocr);
-      const report = buildReport({ labelId: file.name, expected, extracted, beverageType, isImport });
+      const report = buildReport({ labelId: file.name, expected, extracted, isImport });
 
       const ms = Math.round(performance.now() - started);
       const conf = Number.isFinite(ocr.confidence) ? `${Math.round(ocr.confidence)}%` : 'n/a';
@@ -98,7 +110,7 @@ export function initSingle(root) {
       if (banner) banner.focus();
 
       appendAiPanel(resultEl, {
-        file, ocrText: ocr.text, expected, beverageType, isImport, offlineReport: report,
+        file, ocrText: ocr.text, expected, isImport, offlineReport: report,
       });
     } catch (err) {
       const message = err && err.message ? err.message : String(err);
@@ -112,7 +124,7 @@ export function initSingle(root) {
 /**
  * Render the optional "Double-check with AI" panel below the offline verdict.
  * @param {HTMLElement} container
- * @param {{file: File, ocrText: string, expected: object, beverageType: string,
+ * @param {{file: File, ocrText: string, expected: object,
  *          isImport: boolean, offlineReport: object}} ctx
  */
 function appendAiPanel(container, ctx) {
@@ -143,13 +155,13 @@ function appendAiPanel(container, ctx) {
     try {
       const image = await fileToPayload(ctx.file);
       const resp = await requestVerify({
-        image, ocrText: ctx.ocrText, expected: ctx.expected, beverageType: ctx.beverageType,
+        image, ocrText: ctx.ocrText, expected: ctx.expected,
       });
 
       const aiExtracted = aiFieldsToExtracted(resp.extracted || {}, resp.confidence);
       const aiReport = buildReport({
         labelId: ctx.file.name, expected: ctx.expected, extracted: aiExtracted,
-        beverageType: ctx.beverageType, isImport: ctx.isImport, usedAI: true,
+        isImport: ctx.isImport, usedAI: true,
       });
       const deltas = diffFields(ctx.offlineReport, aiReport);
 

@@ -6,7 +6,7 @@ import { CANONICAL_WARNING } from '../app/js/pipeline/compare.js';
 
 const ocr = (text, confidence = 88) => extractFields({ text, confidence });
 
-test('spirits: fully compliant label PASSES', () => {
+test('fully compliant label PASSES', () => {
   const text = `Old Tom Distillery
 Kentucky Straight Bourbon Whiskey
 45% Alc./Vol. (90 Proof)
@@ -15,7 +15,6 @@ Distilled & Bottled by Old Tom Distillery, Lexington, KY
 ${CANONICAL_WARNING}`;
   const r = buildReport({
     labelId: 't1',
-    beverageType: 'spirits',
     extracted: ocr(text),
     expected: {
       brandName: 'Old Tom Distillery',
@@ -28,7 +27,7 @@ ${CANONICAL_WARNING}`;
   assert.equal(r.overall, 'PASS');
 });
 
-test('spirits: wrong ABV → NEEDS_REVIEW', () => {
+test('wrong ABV → NEEDS_REVIEW', () => {
   const text = `Old Tom Distillery
 Kentucky Straight Bourbon Whiskey
 45% Alc./Vol. (90 Proof)
@@ -36,7 +35,6 @@ Kentucky Straight Bourbon Whiskey
 Distilled & Bottled by Old Tom Distillery, Lexington, KY
 ${CANONICAL_WARNING}`;
   const r = buildReport({
-    beverageType: 'spirits',
     extracted: ocr(text),
     expected: {
       brandName: 'Old Tom Distillery',
@@ -57,7 +55,6 @@ Kentucky Straight Bourbon Whiskey
 750 mL
 Distilled & Bottled by Old Tom Distillery, Lexington, KY`;
   const r = buildReport({
-    beverageType: 'spirits',
     extracted: ocr(text),
     expected: {
       brandName: 'Old Tom Distillery',
@@ -71,7 +68,7 @@ Distilled & Bottled by Old Tom Distillery, Lexington, KY`;
   assert.equal(r.fields.find((f) => f.field === 'warning').status, 'MISSING');
 });
 
-test('imported wine missing country of origin → NEEDS_REVIEW', () => {
+test('imported label missing country of origin → NEEDS_REVIEW', () => {
   const text = `Château de la Roche
 Sancerre (White Wine)
 12.5% VOL.
@@ -79,7 +76,6 @@ Sancerre (White Wine)
 Bottled by Vignoble Imports, New York, NY
 ${CANONICAL_WARNING}`; // no "FRANCE" on the label
   const r = buildReport({
-    beverageType: 'wine',
     isImport: true,
     extracted: ocr(text),
     expected: {
@@ -95,14 +91,13 @@ ${CANONICAL_WARNING}`; // no "FRANCE" on the label
   assert.equal(r.fields.find((f) => f.field === 'countryOfOrigin').status, 'MISMATCH');
 });
 
-test('beer: ABV not required, so an unreadable ABV still PASSES', () => {
+test('ABV is required for every label — a missing ABV → NEEDS_REVIEW', () => {
   const text = `Mountain Peak Brewing
 India Pale Ale (IPA)
 12 FL. OZ. (355 mL)
 Brewed & Canned by Mountain Peak Brewing, Denver, CO
 ${CANONICAL_WARNING}`; // no ABV printed
   const r = buildReport({
-    beverageType: 'beer',
     extracted: ocr(text),
     expected: {
       brandName: 'Mountain Peak Brewing',
@@ -112,19 +107,18 @@ ${CANONICAL_WARNING}`; // no ABV printed
       producer: 'Brewed & Canned by Mountain Peak Brewing, Denver, CO',
     },
   });
-  assert.equal(r.overall, 'PASS');
+  assert.equal(r.overall, 'NEEDS_REVIEW');
+  assert.equal(r.fields.find((f) => f.field === 'abv').status, 'MISMATCH');
 });
 
 test('defaults: buildReport() with no args → NEEDS_REVIEW (all required missing)', () => {
   const r = buildReport();
   assert.equal(r.overall, 'NEEDS_REVIEW');
-  assert.equal(r.beverageType, 'other');
   assert.equal(r.usedAI, false);
 });
 
 test('derives OCR text from extracted.lines when rawText is absent', () => {
   const r = buildReport({
-    beverageType: 'beer',
     extracted: {
       lines: [
         'Mountain Peak Brewing',
@@ -140,6 +134,7 @@ test('derives OCR text from extracted.lines when rawText is absent', () => {
     expected: {
       brandName: 'Mountain Peak Brewing',
       classType: 'India Pale Ale (IPA)',
+      abv: '7.2% Alc./Vol.',
       netContents: '355 mL',
       producer: 'Brewed & Canned by Mountain Peak Brewing, Denver, CO',
     },
@@ -152,7 +147,6 @@ test('garbled label: an unreadable required field is LOW_CONFIDENCE, not MISMATC
   // Body text read cleanly (high overall confidence) but a stylized title was
   // garbled (garbledRatio high) and isn't in the OCR text.
   const r = buildReport({
-    beverageType: 'spirits',
     extracted: {
       rawText: '45% Alc./Vol. (90 Proof)\n750 mL\nDistilled & Bottled by Old Tom Distillery, Lexington, KY',
       abv: { percent: 45 },
@@ -175,7 +169,6 @@ test('garbled label: an unreadable required field is LOW_CONFIDENCE, not MISMATC
 
 test('clean label: a genuinely wrong field is MISMATCH (no garble)', () => {
   const r = buildReport({
-    beverageType: 'spirits',
     extracted: {
       rawText: 'Old Tom Distillery\nKentucky Straight Bourbon Whiskey\n45% Alc./Vol. (90 Proof)\n750 mL\nDistilled & Bottled by Old Tom Distillery, Lexington, KY',
       abv: { percent: 45 },

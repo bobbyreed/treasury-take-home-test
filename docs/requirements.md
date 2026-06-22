@@ -58,10 +58,13 @@ interview evidence.
   verbatim and `GOVERNMENT WARNING:` in all caps. *AC:* exact wording matches;
   title-case lead-in fails; missing warning fails. *Evidence:* Jenny on
   word-for-word / all-caps / the title-case rejection.
-- **US-3 (P1/P2):** have the right fields required **per beverage type**. *AC:*
-  ABV required for spirits, conditional for beer; imports require country of
-  origin. *Evidence:* README — requirements vary by type; ABV has wine/beer
-  exceptions.
+- **US-3 (P1/P2):** have the **right fields required**, including country of
+  origin for imports. *AC:* a fixed required set (brand, class/type, ABV, net
+  contents, producer, warning) is enforced on every label; imports additionally
+  require country of origin. *Revised:* originally scoped as varying-by-beverage-
+  type; that selector was removed (it added a form field and a branch without
+  changing outcomes a reviewer cares about). A product that legitimately lacks an
+  ABV is handled by the reviewer rather than by special-casing the type.
 
 ### Judgment & trust
 - **US-4 (P1):** treat trivial differences as matches, not failures. *AC:*
@@ -111,7 +114,7 @@ interview evidence.
 |---|---|---|
 | Single-label verify (7 fields) + per-field result | US-1, US-5 | ✅ Done (M5) |
 | Verbatim warning + all-caps check | US-2 | ✅ Done |
-| Beverage-type required-field rules | US-3 | ✅ Done |
+| Fixed required-field rules (+ country for imports) | US-3 | ✅ Done — replaced the per-beverage-type variant |
 | Fuzzy / normalization (case-punct tolerance) | US-4 | ✅ Done |
 | Words+icon, plain-language verdict card | US-5, US-8 | ✅ Done |
 | Offline-first pipeline (vendored OCR, no CDN) | US-11 | ✅ Done |

@@ -39,7 +39,7 @@ export async function fileToPayload(file) {
 /**
  * Call the verification endpoint. Throws on network failure or non-2xx so the
  * caller can degrade gracefully (the offline result already stands).
- * @param {{ image: object, ocrText?: string, expected?: object, beverageType?: string }} body
+ * @param {{ image: object, ocrText?: string, expected?: object }} body
  * @param {string} [endpoint]
  * @returns {Promise<{ extracted: object, confidence: number|null, notes: string|null }>}
  */

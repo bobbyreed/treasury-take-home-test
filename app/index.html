@@ -39,18 +39,12 @@
         <legend>2. Application values to check</legend>
 
         <div class="grid">
-          <label>Beverage type
-            <select id="beverageType">
-              <option value="spirits">Distilled spirits</option>
-              <option value="wine">Wine</option>
-              <option value="beer">Beer / malt</option>
-              <option value="other">Other</option>
-            </select>
-          </label>
-
           <label class="checkbox import-checkbox">
             <input type="checkbox" id="isImport">
             Imported (requires country of origin)
+          </label>
+          <label>Country of origin
+            <input type="text" id="countryOfOrigin" placeholder="imports only" autocomplete="off" disabled>
           </label>
 
           <label>Brand name
@@ -65,11 +59,8 @@
           <label>Net contents
             <input type="text" id="netContents" placeholder="e.g. 750 mL" autocomplete="off">
           </label>
-          <label>Producer / bottler
+          <label class="full-row">Producer / bottler
             <input type="text" id="producer" autocomplete="off">
-          </label>
-          <label>Country of origin
-            <input type="text" id="countryOfOrigin" placeholder="imports only" autocomplete="off">
           </label>
         </div>
       </fieldset>

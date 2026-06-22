@@ -1,23 +1,22 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { rulesFor, BEVERAGE_RULES } from '../app/js/pipeline/rules.js';
+import { rulesFor, FIELDS } from '../app/js/pipeline/rules.js';
 
-// Scaffold smoke tests: confirm ESM wiring and the beverage-rules table.
-// Feature tests for comparison/extraction arrive at M3/M4.
+// Confirm ESM wiring and the fixed required-field rule.
 
-test('beverage rules table is wired', () => {
-  assert.ok(BEVERAGE_RULES.spirits, 'spirits rules exist');
-  const r = rulesFor('spirits');
-  assert.ok(r.requiredFields.includes('warning'), 'warning is always required');
-  assert.equal(r.abvRequired, true, 'spirits require ABV');
+test('every label requires the fixed field set, including the warning', () => {
+  const r = rulesFor();
+  for (const f of ['brandName', 'classType', 'abv', 'netContents', 'producer', 'warning']) {
+    assert.ok(r.requiredFields.includes(f), `${f} is required`);
+  }
+  assert.ok(!r.requiredFields.includes('countryOfOrigin'), 'country not required for domestic');
 });
 
 test('imports additionally require country of origin', () => {
-  const r = rulesFor('wine', true);
-  assert.ok(r.requiredFields.includes('countryOfOrigin'));
+  assert.ok(rulesFor(true).requiredFields.includes('countryOfOrigin'));
 });
 
-test('unknown beverage type falls back to "other"', () => {
-  const r = rulesFor('mead');
-  assert.equal(r.beverageType, 'other');
+test('FIELDS table is wired', () => {
+  assert.ok(FIELDS.includes('warning'));
+  assert.ok(FIELDS.includes('countryOfOrigin'));
 });

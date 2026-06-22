@@ -34,7 +34,6 @@ test('aiFieldsToExtracted: parses ABV/net and synthesizes rawText', () => {
 test('AI reading flows through buildReport to a PASS', () => {
   const ex = aiFieldsToExtracted(AI, 95);
   const r = buildReport({
-    beverageType: 'wine',
     extracted: ex,
     usedAI: true,
     expected: {
@@ -54,7 +53,6 @@ test('readable:false forces the "couldn\'t read" path (LOW_CONFIDENCE, not MISMA
   const ex = aiFieldsToExtracted({ ...AI, readable: false, brandName: '' }, 30);
   assert.equal(ex.garbledRatio, 1);
   const r = buildReport({
-    beverageType: 'wine',
     extracted: ex,
     usedAI: true,
     expected: { ...AI, brandName: 'Viking Blood' },

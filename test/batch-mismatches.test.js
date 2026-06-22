@@ -74,7 +74,6 @@ for (const r of mismatchRows) {
         netContents: r.netContents, producer: r.producer, countryOfOrigin: r.countryOfOrigin,
       },
       extracted,
-      beverageType: r.beverageType,
       isImport: r.isImport === 'true',
     });
 

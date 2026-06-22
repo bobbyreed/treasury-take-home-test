@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 import { parseCsv, toCsv } from '../app/js/pipeline/csv.js';
 
 test('parseCsv: header + rows into objects', () => {
-  const { headers, rows } = parseCsv('filename,beverageType\na.png,wine\nb.png,beer\n');
-  assert.deepEqual(headers, ['filename', 'beverageType']);
+  const { headers, rows } = parseCsv('filename,isImport\na.png,true\nb.png,false\n');
+  assert.deepEqual(headers, ['filename', 'isImport']);
   assert.equal(rows.length, 2);
-  assert.deepEqual(rows[0], { filename: 'a.png', beverageType: 'wine' });
+  assert.deepEqual(rows[0], { filename: 'a.png', isImport: 'true' });
 });
 
 test('parseCsv: quoted field with commas (producer line)', () => {

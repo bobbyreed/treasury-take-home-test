@@ -1,27 +1,27 @@
-filename,beverageType,isImport,brandName,classType,abv,netContents,producer,countryOfOrigin
-SilverCreekVineyard.png,wine,false,Silver Creek Vineyard,Cabernet Sauvignon,14.8% VOL.,750 mL,"Produced & Bottled by Silver Creek Vineyard, St. Helena, CA",
-ChateauDeLaRoche.png,wine,true,Château de la Roche,Sancerre (White Wine),12.5% VOL.,750 mL,"Product of France. Bottled by Vignoble Imports, New York, NY",FRANCE
-RedBarrel.png,wine,false,Red Barrel Cellars,Cranberry Sparkling Wine,9.0% VOL.,750 mL,"Carbonated, Produced & Bottled by Red Barrel Cellars, Traverse City, MI",
-CiderHouse.png,wine,false,Cider House Rules,Hard Apple Cider,6.5% VOL.,355 mL (12 fl. oz.),"Produced & Bottled by Cider House Rules, Hood River, OR",
-OldTomDistillery.png,spirits,false,Old Tom Distillery,Kentucky Straight Bourbon Whiskey,45% Alc./Vol. (90 Proof),750 mL,"Distilled & Bottled by Old Tom Distillery, Lexington, KY",
-BlueSky.png,spirits,false,Blue Sky Distilling,Vodka,40% Alc./Vol. (80 Proof),1 L,"Distilled & Bottled by Blue Sky Distilling, Denver, CO",
-JuniperGrove.png,spirits,false,Juniper Grove,Distilled Gin,43% Alc./Vol. (86 Proof),750 mL,"Distilled by Juniper Grove Distilling, Golden, CO. Bottled for Alpine Spirits, Boulder, CO",
-RioAzul.png,spirits,true,Río Azul Spirits,Añejo Tequila,40% Alc./Vol. (80 Proof),750 mL,"Distilled by Río Azul Spirits, Tequila, Jalisco, Mexico. Imported by Golden Eagle Imports, San Antonio, TX",MEXICO
-SmokyMountain.png,spirits,false,Smoky Mountain,Corn Whiskey,50% Alc./Vol. (100 Proof),375 mL,"Distilled & Bottled by Smoky Mountain Distillery, Gatlinburg, TN",
-HighlandCask.png,spirits,true,Highland Cask,Blended Scotch Whisky,43% Alc./Vol. (86 Proof),750 mL,"Distilled, Blended & Bottled in Scotland. Imported by Albion Spirits, Boston, MA",SCOTLAND
-BlackbeardCove.png,spirits,false,Blackbeard's Cove,Spiced Rum,35% Alc./Vol. (70 Proof),750 mL,"Produced & Bottled by Caribbean Imports, Miami, FL",
-MountainPeak.png,beer,false,Mountain Peak Brewing,India Pale Ale (IPA),7.2% Alc./Vol.,12 FL. OZ. (355 mL),"Brewed & Canned by Mountain Peak Brewing, Denver, CO",
-GoldenHarvest.png,beer,false,Golden Harvest,Farmhouse Ale / Saison,6.0% Alc./Vol.,1 PINT 6 FL. OZ. (750 mL),"Brewed & Bottled by Golden Harvest Brewery, Portland, OR",
-CityCenter.png,beer,false,City Center Brewery,Light Lager,4.2% Alc./Vol.,12 FL. OZ. (355 mL),"Brewed & Canned by City Center Brewery, Milwaukee, WI",
-OldPort.png,beer,true,Old Port Brewery,Stout,4.3% Alc./Vol.,14.9 FL. OZ. (440 mL),"Product of Ireland. Brewed by Old Port Brewery, Dublin, Ireland. Imported by Global Beverage Partners, New York, NY",IRELAND
-MadScientist.png,beer,false,The Mad Scientist,Imperial Stout,13.5% Alc./Vol.,16 FL. OZ. (473 mL),"Brewed, Aged & Canned by Mad Scientist Brewery, Atlanta, GA",
-LakesideMeadery.png,wine,false,Lakeside Meadery,Traditional Mead (Honey Wine),12.0% VOL.,500 mL,"Produced & Bottled by Lakeside Meadery, Minneapolis, MN",
-SpicyBadger.png,wine,false,The Spicy Badger,Habanero Mead,14.5% VOL.,375 mL,"Produced & Bottled by Spicy Badger Meadery, Phoenix, AZ",
-PrairieDew.png,wine,false,Prairie Dew,Apple Wine,11.0% VOL.,750 mL,"Produced & Bottled by Prairie Dew Winery, Bismarck, ND",
-IslandHeat.png,spirits,false,Island Heat,Pineapple Flavored Vodka,30% Alc./Vol. (60 Proof),750 mL,"Produced & Bottled by Sunshine Bottling Co., Orlando, FL",
-HighDesert.png,spirits,true,High Desert,Mezcal Joven (100% Maguey Espadín),42% Alc./Vol. (84 Proof),750 mL,"Product of Mexico. Bottled by Mezcal de Oaxaca, S.A. de C.V. Imported by Border Crossings Imports, El Paso, TX",MEXICO
-VikingBlood.png,wine,false,Viking Blood,Cherry Mead (Honey Wine with cherries),13.5% VOL.,750 mL,"Produced & Bottled by Heritage Meadery, Burlington, VT",
-PacificCoastDistillers.png,spirits,false,Pacific Coast Distillers,Gin Liqueur,25% Alc./Vol. (50 Proof),750 mL,"Produced & Bottled by Pacific Coast Distillers, San Diego, CA",
-PioneerCellars.png,wine,false,Pioneer Cellars,Fortified Wine (Port style),19.5% VOL.,750 mL,"Produced & Bottled by Pioneer Cellars, Sonoma, CA",
-PioneerCellars-2.png,wine,false,Pioneer Cellars,Fortified Wine (Port style),19.5% VOL.,750 mL,"Produced & Bottled by Pioneer Cellars, Sonoma, CA",
-SilverCreekVineyard-tipped.png,wine,false,Silver Creek Vineyard,Cabernet Sauvignon,14.8% VOL.,750 mL,"Produced & Bottled by Silver Creek Vineyard, St. Helena, CA",
+filename,isImport,brandName,classType,abv,netContents,producer,countryOfOrigin
+SilverCreekVineyard.png,false,Silver Creek Vineyard,Cabernet Sauvignon,14.8% VOL.,750 mL,"Produced & Bottled by Silver Creek Vineyard, St. Helena, CA",
+ChateauDeLaRoche.png,true,Château de la Roche,Sancerre (White Wine),12.5% VOL.,750 mL,"Product of France. Bottled by Vignoble Imports, New York, NY",FRANCE
+RedBarrel.png,false,Red Barrel Cellars,Cranberry Sparkling Wine,9.0% VOL.,750 mL,"Carbonated, Produced & Bottled by Red Barrel Cellars, Traverse City, MI",
+CiderHouse.png,false,Cider House Rules,Hard Apple Cider,6.5% VOL.,355 mL (12 fl. oz.),"Produced & Bottled by Cider House Rules, Hood River, OR",
+OldTomDistillery.png,false,Old Tom Distillery,Kentucky Straight Bourbon Whiskey,45% Alc./Vol. (90 Proof),750 mL,"Distilled & Bottled by Old Tom Distillery, Lexington, KY",
+BlueSky.png,false,Blue Sky Distilling,Vodka,40% Alc./Vol. (80 Proof),1 L,"Distilled & Bottled by Blue Sky Distilling, Denver, CO",
+JuniperGrove.png,false,Juniper Grove,Distilled Gin,43% Alc./Vol. (86 Proof),750 mL,"Distilled by Juniper Grove Distilling, Golden, CO. Bottled for Alpine Spirits, Boulder, CO",
+RioAzul.png,true,Río Azul Spirits,Añejo Tequila,40% Alc./Vol. (80 Proof),750 mL,"Distilled by Río Azul Spirits, Tequila, Jalisco, Mexico. Imported by Golden Eagle Imports, San Antonio, TX",MEXICO
+SmokyMountain.png,false,Smoky Mountain,Corn Whiskey,50% Alc./Vol. (100 Proof),375 mL,"Distilled & Bottled by Smoky Mountain Distillery, Gatlinburg, TN",
+HighlandCask.png,true,Highland Cask,Blended Scotch Whisky,43% Alc./Vol. (86 Proof),750 mL,"Distilled, Blended & Bottled in Scotland. Imported by Albion Spirits, Boston, MA",SCOTLAND
+BlackbeardCove.png,false,Blackbeard's Cove,Spiced Rum,35% Alc./Vol. (70 Proof),750 mL,"Produced & Bottled by Caribbean Imports, Miami, FL",
+MountainPeak.png,false,Mountain Peak Brewing,India Pale Ale (IPA),7.2% Alc./Vol.,12 FL. OZ. (355 mL),"Brewed & Canned by Mountain Peak Brewing, Denver, CO",
+GoldenHarvest.png,false,Golden Harvest,Farmhouse Ale / Saison,6.0% Alc./Vol.,1 PINT 6 FL. OZ. (750 mL),"Brewed & Bottled by Golden Harvest Brewery, Portland, OR",
+CityCenter.png,false,City Center Brewery,Light Lager,4.2% Alc./Vol.,12 FL. OZ. (355 mL),"Brewed & Canned by City Center Brewery, Milwaukee, WI",
+OldPort.png,true,Old Port Brewery,Stout,4.3% Alc./Vol.,14.9 FL. OZ. (440 mL),"Product of Ireland. Brewed by Old Port Brewery, Dublin, Ireland. Imported by Global Beverage Partners, New York, NY",IRELAND
+MadScientist.png,false,The Mad Scientist,Imperial Stout,13.5% Alc./Vol.,16 FL. OZ. (473 mL),"Brewed, Aged & Canned by Mad Scientist Brewery, Atlanta, GA",
+LakesideMeadery.png,false,Lakeside Meadery,Traditional Mead (Honey Wine),12.0% VOL.,500 mL,"Produced & Bottled by Lakeside Meadery, Minneapolis, MN",
+SpicyBadger.png,false,The Spicy Badger,Habanero Mead,14.5% VOL.,375 mL,"Produced & Bottled by Spicy Badger Meadery, Phoenix, AZ",
+PrairieDew.png,false,Prairie Dew,Apple Wine,11.0% VOL.,750 mL,"Produced & Bottled by Prairie Dew Winery, Bismarck, ND",
+IslandHeat.png,false,Island Heat,Pineapple Flavored Vodka,30% Alc./Vol. (60 Proof),750 mL,"Produced & Bottled by Sunshine Bottling Co., Orlando, FL",
+HighDesert.png,true,High Desert,Mezcal Joven (100% Maguey Espadín),42% Alc./Vol. (84 Proof),750 mL,"Product of Mexico. Bottled by Mezcal de Oaxaca, S.A. de C.V. Imported by Border Crossings Imports, El Paso, TX",MEXICO
+VikingBlood.png,false,Viking Blood,Cherry Mead (Honey Wine with cherries),13.5% VOL.,750 mL,"Produced & Bottled by Heritage Meadery, Burlington, VT",
+PacificCoastDistillers.png,false,Pacific Coast Distillers,Gin Liqueur,25% Alc./Vol. (50 Proof),750 mL,"Produced & Bottled by Pacific Coast Distillers, San Diego, CA",
+PioneerCellars.png,false,Pioneer Cellars,Fortified Wine (Port style),19.5% VOL.,750 mL,"Produced & Bottled by Pioneer Cellars, Sonoma, CA",
+PioneerCellars-2.png,false,Pioneer Cellars,Fortified Wine (Port style),19.5% VOL.,750 mL,"Produced & Bottled by Pioneer Cellars, Sonoma, CA",
+SilverCreekVineyard-tipped.png,false,Silver Creek Vineyard,Cabernet Sauvignon,14.8% VOL.,750 mL,"Produced & Bottled by Silver Creek Vineyard, St. Helena, CA",

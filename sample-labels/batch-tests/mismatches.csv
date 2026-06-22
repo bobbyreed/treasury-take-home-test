@@ -1,19 +1,19 @@
-filename,beverageType,isImport,brandName,classType,abv,netContents,producer,countryOfOrigin
-BlackbeardCove.png,spirits,false,Blackbeard's Cove,Spiced Rum,40% Alc./Vol. (80 Proof),750 mL,"Produced & Bottled by Caribbean Imports, Miami, FL",
-CityCenter.png,beer,false,City Center Brewery,Light Lager,4.2% Alc./Vol.,16 FL. OZ. (473 mL),"Brewed & Canned by City Center Brewery, Milwaukee, WI",
-GoldenHarvest.png,beer,false,Sunrise Fields,Farmhouse Ale / Saison,6.0% Alc./Vol.,1 PINT 6 FL. OZ. (750 mL),"Brewed & Bottled by Golden Harvest Brewery, Portland, OR",
-HighDesert.png,spirits,true,High Desert,Mezcal Joven (100% Maguey Espadín),42% Alc./Vol. (84 Proof),750 mL,"Product of Mexico. Bottled by Mezcal de Oaxaca, S.A. de C.V. Imported by Border Crossings Imports, El Paso, TX",
-HighlandCask.png,spirits,true,Highland Cask,Blended Scotch Whisky,43% Alc./Vol. (86 Proof),750 mL,"Distilled, Blended & Bottled in Scotland. Imported by Albion Spirits, Boston, MA",FRANCE
-IslandHeat.png,spirits,false,Island Heat,Coconut Flavored Rum,30% Alc./Vol. (60 Proof),750 mL,"Produced & Bottled by Sunshine Bottling Co., Orlando, FL",
-JuniperGrove.png,spirits,false,Juniper Grove,Distilled Gin,50% Alc./Vol. (100 Proof),750 mL,"Distilled by Juniper Grove Distilling, Golden, CO. Bottled for Alpine Spirits, Boulder, CO",
-LakesideMeadery.png,wine,false,Lakeside Meadery,Traditional Mead (Honey Wine),12.0% VOL.,750 mL,"Produced & Bottled by Lakeside Meadery, Minneapolis, MN",
-MadScientist.png,beer,false,the mad scientist,Imperial Stout,13.5% Alc./Vol.,16 FL. OZ. (473 mL),"Brewed, Aged & Canned by Mad Scientist Brewery, Atlanta, GA",
-MountainPeak.png,beer,false,Mountain Peak Brewing,India Pale Ale (IPA),7.2% Alc./Vol.,12 FL. OZ. (355 mL),"Bottled by Summit Craft Ales, Aspen, CO",
-OldPort.png,beer,true,Old Port Brewery,Stout,4.3% Alc./Vol.,12 FL. OZ. (355 mL),"Product of Ireland. Brewed by Old Port Brewery, Dublin, Ireland. Imported by Global Beverage Partners, New York, NY",IRELAND
-PacificCoastDistillers.png,spirits,false,Pacific Coast Distillers,Gin Liqueur,40% Alc./Vol. (80 Proof),750 mL,"Produced & Bottled by Pacific Coast Distillers, San Diego, CA",
-PioneerCellars.png,wine,false,Pioneer Cellars,Dry Red Table Wine,19.5% VOL.,750 mL,"Produced & Bottled by Pioneer Cellars, Sonoma, CA",
-PrairieDew.png,wine,false,Meadow Brook Cellars,Apple Wine,11.0% VOL.,750 mL,"Produced & Bottled by Prairie Dew Winery, Bismarck, ND",
-RioAzul.png,spirits,true,Río Azul Spirits,Añejo Tequila,40% Alc./Vol. (80 Proof),750 mL,"Distilled by Río Azul Spirits, Tequila, Jalisco, Mexico. Imported by Golden Eagle Imports, San Antonio, TX",SPAIN
-SmokyMountain.png,spirits,false,Smoky Mountain,Corn Whiskey,50% Alc./Vol. (100 Proof),750 mL,"Distilled & Bottled by Smoky Mountain Distillery, Gatlinburg, TN",
-SpicyBadger.png,wine,false,The Spicy Badger,Habanero Mead,9.0% VOL.,375 mL,"Produced & Bottled by Spicy Badger Meadery, Phoenix, AZ",
-VikingBlood.png,wine,false,Viking Blood,Cherry Mead (Honey Wine with cherries),13.5% VOL.,750 mL,"Produced & Bottled by Heritage Meadery, Burlington, VT",
+filename,isImport,brandName,classType,abv,netContents,producer,countryOfOrigin
+BlackbeardCove.png,false,Blackbeard's Cove,Spiced Rum,40% Alc./Vol. (80 Proof),750 mL,"Produced & Bottled by Caribbean Imports, Miami, FL",
+CityCenter.png,false,City Center Brewery,Light Lager,4.2% Alc./Vol.,16 FL. OZ. (473 mL),"Brewed & Canned by City Center Brewery, Milwaukee, WI",
+GoldenHarvest.png,false,Sunrise Fields,Farmhouse Ale / Saison,6.0% Alc./Vol.,1 PINT 6 FL. OZ. (750 mL),"Brewed & Bottled by Golden Harvest Brewery, Portland, OR",
+HighDesert.png,true,High Desert,Mezcal Joven (100% Maguey Espadín),42% Alc./Vol. (84 Proof),750 mL,"Product of Mexico. Bottled by Mezcal de Oaxaca, S.A. de C.V. Imported by Border Crossings Imports, El Paso, TX",
+HighlandCask.png,true,Highland Cask,Blended Scotch Whisky,43% Alc./Vol. (86 Proof),750 mL,"Distilled, Blended & Bottled in Scotland. Imported by Albion Spirits, Boston, MA",FRANCE
+IslandHeat.png,false,Island Heat,Coconut Flavored Rum,30% Alc./Vol. (60 Proof),750 mL,"Produced & Bottled by Sunshine Bottling Co., Orlando, FL",
+JuniperGrove.png,false,Juniper Grove,Distilled Gin,50% Alc./Vol. (100 Proof),750 mL,"Distilled by Juniper Grove Distilling, Golden, CO. Bottled for Alpine Spirits, Boulder, CO",
+LakesideMeadery.png,false,Lakeside Meadery,Traditional Mead (Honey Wine),12.0% VOL.,750 mL,"Produced & Bottled by Lakeside Meadery, Minneapolis, MN",
+MadScientist.png,false,the mad scientist,Imperial Stout,13.5% Alc./Vol.,16 FL. OZ. (473 mL),"Brewed, Aged & Canned by Mad Scientist Brewery, Atlanta, GA",
+MountainPeak.png,false,Mountain Peak Brewing,India Pale Ale (IPA),7.2% Alc./Vol.,12 FL. OZ. (355 mL),"Bottled by Summit Craft Ales, Aspen, CO",
+OldPort.png,true,Old Port Brewery,Stout,4.3% Alc./Vol.,12 FL. OZ. (355 mL),"Product of Ireland. Brewed by Old Port Brewery, Dublin, Ireland. Imported by Global Beverage Partners, New York, NY",IRELAND
+PacificCoastDistillers.png,false,Pacific Coast Distillers,Gin Liqueur,40% Alc./Vol. (80 Proof),750 mL,"Produced & Bottled by Pacific Coast Distillers, San Diego, CA",
+PioneerCellars.png,false,Pioneer Cellars,Dry Red Table Wine,19.5% VOL.,750 mL,"Produced & Bottled by Pioneer Cellars, Sonoma, CA",
+PrairieDew.png,false,Meadow Brook Cellars,Apple Wine,11.0% VOL.,750 mL,"Produced & Bottled by Prairie Dew Winery, Bismarck, ND",
+RioAzul.png,true,Río Azul Spirits,Añejo Tequila,40% Alc./Vol. (80 Proof),750 mL,"Distilled by Río Azul Spirits, Tequila, Jalisco, Mexico. Imported by Golden Eagle Imports, San Antonio, TX",SPAIN
+SmokyMountain.png,false,Smoky Mountain,Corn Whiskey,50% Alc./Vol. (100 Proof),750 mL,"Distilled & Bottled by Smoky Mountain Distillery, Gatlinburg, TN",
+SpicyBadger.png,false,The Spicy Badger,Habanero Mead,9.0% VOL.,375 mL,"Produced & Bottled by Spicy Badger Meadery, Phoenix, AZ",
+VikingBlood.png,false,Viking Blood,Cherry Mead (Honey Wine with cherries),13.5% VOL.,750 mL,"Produced & Bottled by Heritage Meadery, Burlington, VT",

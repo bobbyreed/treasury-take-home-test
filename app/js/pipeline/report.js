@@ -1,11 +1,12 @@
 /**
  * Assemble a VerificationReport from expected application values + extracted OCR
- * fields, under the applicable beverage rules. Pure and environment-agnostic.
+ * fields, under the required-field rules. Pure and environment-agnostic.
  *
- * Overall verdict: PASS iff every *required* field (per the beverage rules) is
- * MATCH or MINOR_DIFFERENCE; any MISMATCH / MISSING / LOW_CONFIDENCE on a
- * required field → NEEDS_REVIEW. Non-required fields are still reported but don't
- * affect the verdict (e.g. ABV on a beer, where rules don't require it).
+ * Overall verdict: PASS iff every *required* field (see rules.js) is MATCH or
+ * MINOR_DIFFERENCE; any MISMATCH / MISSING / LOW_CONFIDENCE on a required field
+ * → NEEDS_REVIEW. Country of origin is only required for imports; any other
+ * supplied-but-not-required value is still reported but doesn't affect the
+ * verdict.
  *
  * See docs/IMPLEMENTATION_PLAN.md §6 for the field shapes.
  */
@@ -26,7 +27,6 @@ const PASSING = new Set([STATUS.MATCH, STATUS.MINOR_DIFFERENCE]);
  *   labelId?: string,
  *   expected?: object,      // brandName, classType, abv, netContents, producer, countryOfOrigin
  *   extracted?: object,     // from extractFields()
- *   beverageType?: string,
  *   isImport?: boolean,
  *   usedAI?: boolean
  * }} args
@@ -36,11 +36,10 @@ export function buildReport({
   labelId = null,
   expected = {},
   extracted = {},
-  beverageType = 'other',
   isImport = false,
   usedAI = false,
 } = {}) {
-  const rules = rulesFor(beverageType, isImport);
+  const rules = rulesFor(isImport);
   const required = new Set(rules.requiredFields);
   const conf = effectiveConfidence(extracted);
   const text = extracted.rawText || (extracted.lines ? extracted.lines.join('\n') : '');
@@ -78,7 +77,6 @@ export function buildReport({
   return {
     labelId,
     overall,
-    beverageType: rules.beverageType,
     isImport,
     usedAI,
     fields,

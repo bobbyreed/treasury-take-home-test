@@ -33,9 +33,9 @@ image-prompts.md
 ## `expected-values.csv`
 
 One row per product, keyed by **basename** so it pairs with the matching image in
-any folder. Columns: `filename, beverageType, isImport, brandName, classType,
-abv, netContents, producer, countryOfOrigin`. The batch UI pairs images to rows
-by basename, so folder location does not matter.
+any folder. Columns: `filename, isImport, brandName, classType, abv,
+netContents, producer, countryOfOrigin`. The batch UI pairs images to rows by
+basename, so folder location does not matter.
 
 ## Provenance & coverage notes
 

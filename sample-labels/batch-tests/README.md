@@ -75,6 +75,6 @@ still NEEDS_REVIEW whenever the difference is large enough to matter.
 The government-warning checks (missing / title-case "Government Warning" /
 reworded text) are judged from the **image**, not the CSV, so they can't be
 injected here — they need purpose-built label images and are exercised on the
-single-label page. ABV errors on **beer** are also omitted because ABV isn't a
-required field for beer (the mismatch would show on the field but wouldn't change
-the verdict); the beer rows above use net/brand/producer instead.
+single-label page. (Required fields are now the same for every label — brand,
+class/type, ABV, net contents, producer, warning, plus country of origin for
+imports — so there's no beverage-type column and ABV is required for all.)

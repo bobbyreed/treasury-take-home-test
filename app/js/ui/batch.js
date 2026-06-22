@@ -72,7 +72,7 @@ export function initBatch(root) {
           const { data } = await scheduler.addJob('recognize', canvas);
           const extracted = extractFields(data);
           if (!row) {
-            return { file: file.name, overall: 'NO_DATA', beverageType: '', fields: [], confidence: data.confidence };
+            return { file: file.name, overall: 'NO_DATA', fields: [], confidence: data.confidence };
           }
           const report = buildReport({
             labelId: file.name,
@@ -80,13 +80,12 @@ export function initBatch(root) {
               brandName: row.brandName, classType: row.classType, abv: row.abv,
               netContents: row.netContents, producer: row.producer, countryOfOrigin: row.countryOfOrigin,
             },
-            beverageType: row.beverageType || 'other',
             isImport: truthy(row.isImport),
             extracted,
           });
-          return { file: file.name, overall: report.overall, beverageType: report.beverageType, fields: report.fields, confidence: data.confidence };
+          return { file: file.name, overall: report.overall, fields: report.fields, confidence: data.confidence };
         } catch (err) {
-          return { file: file.name, overall: 'ERROR', beverageType: '', fields: [], error: err && err.message ? err.message : String(err) };
+          return { file: file.name, overall: 'ERROR', fields: [], error: err && err.message ? err.message : String(err) };
         }
       }, (res) => {
         results.push(res);
@@ -114,11 +113,10 @@ export function initBatch(root) {
   });
 
   byId('export').addEventListener('click', () => {
-    const headers = ['file', 'beverageType', 'overall', ...FIELDS, 'confidence'];
+    const headers = ['file', 'overall', ...FIELDS, 'confidence'];
     const rows = results.map((r) => {
       const o = {
         file: r.file,
-        beverageType: r.beverageType,
         overall: r.overall,
         confidence: r.confidence != null ? Math.round(r.confidence) : '',
       };
@@ -149,7 +147,7 @@ function ensureTable(container) {
     table = document.createElement('table');
     table.className = 'results-table';
     table.innerHTML =
-      '<thead><tr><th>File</th><th>Beverage</th><th>Result</th><th>Flagged fields</th><th>Conf.</th></tr></thead><tbody></tbody>';
+      '<thead><tr><th>File</th><th>Result</th><th>Flagged fields</th><th>Conf.</th></tr></thead><tbody></tbody>';
     container.appendChild(table);
   }
   return table.querySelector('tbody');
@@ -170,7 +168,6 @@ function appendRow(container, res, needsReviewOnly) {
 
   tr.innerHTML =
     `<td>${esc(res.file)}</td>` +
-    `<td>${esc(res.beverageType || '—')}</td>` +
     `<td>${esc(OVERALL_LABEL[res.overall] || res.overall)}</td>` +
     `<td>${esc(flagged)}</td>` +
     `<td>${res.confidence != null ? Math.round(res.confidence) + '%' : '—'}</td>`;

@@ -77,10 +77,11 @@ input[type="file"] { display: block; margin-top: 0.4rem; font-size: 1rem; }
 
 .checkbox { font-weight: 400; display: flex; align-items: center; gap: 0.5rem; }
 .checkbox input { width: 1.15rem; height: 1.15rem; }
-.import-checkbox { align-self: end; }
+.import-checkbox { align-self: end; padding-bottom: 0.55rem; }
 
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem 1.25rem; }
-.grid > label:first-child, .grid > .import-checkbox { align-self: center; }
+.grid > .full-row { grid-column: 1 / -1; }
+input:disabled { background: #f0f0f0; color: var(--muted); cursor: not-allowed; }
 @media (max-width: 34rem) { .grid { grid-template-columns: 1fr; } }
 
 button.primary {

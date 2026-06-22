@@ -126,6 +126,7 @@ interview evidence.
 | Batch mode | US-9 | ✅ Done (M6) — worker pool, results table, CSV export |
 | Optional AI verification (hard fonts/contrast) | US-10, US-6 | ✅ Done (M7) — `verifyLabel` (Sonnet 4.6, vision); offline path independent |
 | Robustness test set (degraded images) | US-10 | ✅ Done — `sample-labels/ai-generated/distorted/` (24 twins) |
+| Onboarding tour + Guided Practice trainer | US-8 | ✅ Done — `instructions.html` (coachmark tour) + `practice.html` (18 leveled labels, judgment-gated) |
 
 ## Gaps (unmet or partial needs)
 1. ~~**Per-field "unreadable vs wrong" (US-6).**~~ **Resolved** — `extract` computes
@@ -145,6 +146,10 @@ interview evidence.
   excluded from a production build (or removed) before delivery.
 - **Optional AI layer** — only justified by US-10/US-6 hard cases; correctly the
   *lowest* priority and isolated, not a core dependency (respects US-11).
+- **Instructions + Guided Practice** — not required by a story, but a direct
+  adoption aid for the "anyone-can-use-it" bar (US-8): the tour de-risks the first
+  five minutes and the leveled trainer builds the approve/needs-review judgment on
+  the real tool. Linked into the app nav (unlike the build-journal blog).
 
 ## Recommended priority for resuming feature work
 1. ~~Per-field confidence (US-6)~~ — **done.**

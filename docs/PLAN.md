@@ -66,11 +66,12 @@ offline. When the agent is online and wants a second opinion, the extracted data
 - Scale batch from 50 → 400 (tune concurrency, consider Batches API for cost).
 - Side-by-side label-crop vs expected-value highlighting using OCR word boxes.
 - Smarter deskew/perspective correction for hard photos.
-- **Interactive agent-training module (standalone, separate from the app —
-  like the blog, not linked into it):** a guided tour of the tool's features
-  followed by challenge examinations — prompts and dialogs that quiz agents on
-  how to operate the tool and how to interpret a verdict. Can draw on the growing
-  pool of generated labels as exercise material.
+- **Interactive agent-training module** — ✅ **Done** (`instructions.html` +
+  `practice.html`). A coachmark tour of the live single-label screen, plus an
+  18-level Guided Practice trainer over the clean label pool that gates on the
+  learner's approve/needs-review judgment. (Built as two app pages linked into the
+  nav — a refinement of the original "standalone like the blog" framing, since the
+  trainer is for the tool's own users, not a build journal.)
 
 ## 3. Architecture — offline core, optional online booster
 

@@ -30,6 +30,18 @@ export function initSingle(root) {
   const btn = byId('verifyBtn');
   if (!form) return;
 
+  // Results render in a side panel (desktop) that becomes an overlay over the
+  // form on narrow screens; `.has-result` drives both. The close button only
+  // shows on the mobile overlay.
+  const resultCol = byId('result-col');
+  const resultsClose = byId('resultsClose');
+  if (resultsClose && resultCol) {
+    resultsClose.addEventListener('click', () => {
+      resultCol.classList.remove('has-result');
+      if (btn) btn.focus();
+    });
+  }
+
   // Country of origin only applies to imports — keep it disabled (and cleared)
   // until "Imported" is checked, so the field can't carry a stale value.
   const importBox = byId('isImport');
@@ -47,6 +59,7 @@ export function initSingle(root) {
   // application values.
   const fileInput = byId('labelImage');
   const preview = byId('preview');
+  const previewPlaceholder = byId('previewPlaceholder');
   let previewUrl = null;
   if (fileInput && preview) {
     fileInput.addEventListener('change', () => {
@@ -56,9 +69,11 @@ export function initSingle(root) {
         previewUrl = URL.createObjectURL(f);
         preview.src = previewUrl;
         preview.hidden = false;
+        if (previewPlaceholder) previewPlaceholder.hidden = true;
       } else {
         preview.hidden = true;
         preview.removeAttribute('src');
+        if (previewPlaceholder) previewPlaceholder.hidden = false;
       }
     });
   }
@@ -88,6 +103,7 @@ export function initSingle(root) {
     const binarize = byId('binarize').checked;
 
     resultEl.innerHTML = '';
+    if (resultCol) resultCol.classList.remove('has-result');
     btn.disabled = true;
 
     try {
@@ -101,6 +117,7 @@ export function initSingle(root) {
 
       const card = renderReport(report);
       resultEl.appendChild(card);
+      if (resultCol) resultCol.classList.add('has-result');
       const banner = card.querySelector('.verdict');
       if (banner) banner.focus();
 

@@ -23,7 +23,7 @@
     <a href="./practice.html">Guided practice</a>
   </nav>
 
-  <main id="app">
+  <main id="app" class="tool-page">
     <div class="learn-intro">
       <p>
         This is the real checker with a guided tour over it. Follow the popups,
@@ -33,55 +33,73 @@
       <button type="button" id="replayTour" class="ghost-btn">Replay the tour</button>
     </div>
 
-    <form id="verify-form" novalidate>
-      <fieldset>
-        <legend>1. Label image</legend>
-        <div class="field-row">
-          <label class="file-label" for="labelImage">Choose a label photo or scan</label>
-          <input type="file" id="labelImage" accept="image/*">
-        </div>
-        <label class="checkbox">
-          <input type="checkbox" id="binarize" checked>
-          Clean up the image before reading (recommended)
-        </label>
-        <img id="preview" class="preview" alt="Selected label preview" hidden>
-      </fieldset>
+    <div class="tool-layout">
+      <div class="tool-form">
+        <form id="verify-form" novalidate>
+          <fieldset>
+            <legend>1. Label image</legend>
+            <div class="field-row">
+              <label class="file-label" for="labelImage">Choose a label photo or scan</label>
+              <input type="file" id="labelImage" accept="image/*">
+            </div>
+            <label class="checkbox">
+              <input type="checkbox" id="binarize" checked>
+              Clean up the image before reading (recommended)
+            </label>
+            <div class="preview-placeholder" id="previewPlaceholder">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path fill="currentColor" d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2ZM8.5 11l2.5 3 3.5-4.5L19 18H5l3.5-4.5Z"/>
+              </svg>
+              <span>Your label preview appears here</span>
+            </div>
+            <img id="preview" class="preview" alt="Selected label preview" hidden>
+          </fieldset>
 
-      <fieldset>
-        <legend>2. Application values to check</legend>
+          <fieldset>
+            <legend>2. Application values to check</legend>
 
-        <div class="grid">
-          <label class="checkbox import-checkbox">
-            <input type="checkbox" id="isImport">
-            Imported (requires country of origin)
-          </label>
-          <label>Country of origin
-            <input type="text" id="countryOfOrigin" placeholder="imports only" autocomplete="off" disabled>
-          </label>
+            <div class="grid">
+              <label class="checkbox import-checkbox">
+                <input type="checkbox" id="isImport">
+                Imported (requires country of origin)
+              </label>
+              <label>Country of origin
+                <input type="text" id="countryOfOrigin" placeholder="imports only" autocomplete="off" disabled>
+              </label>
 
-          <label>Brand name
-            <input type="text" id="brandName" autocomplete="off">
-          </label>
-          <label>Class / type
-            <input type="text" id="classType" autocomplete="off">
-          </label>
-          <label>Alcohol content
-            <input type="text" id="abv" placeholder="e.g. 45% Alc./Vol. (90 Proof)" autocomplete="off">
-          </label>
-          <label>Net contents
-            <input type="text" id="netContents" placeholder="e.g. 750 mL" autocomplete="off">
-          </label>
-          <label class="full-row">Producer / bottler
-            <input type="text" id="producer" autocomplete="off">
-          </label>
-        </div>
-      </fieldset>
+              <label>Brand name
+                <input type="text" id="brandName" autocomplete="off">
+              </label>
+              <label>Class / type
+                <input type="text" id="classType" autocomplete="off">
+              </label>
+              <label>Alcohol content
+                <input type="text" id="abv" placeholder="e.g. 45% Alc./Vol. (90 Proof)" autocomplete="off">
+              </label>
+              <label>Net contents
+                <input type="text" id="netContents" placeholder="e.g. 750 mL" autocomplete="off">
+              </label>
+              <label class="full-row">Producer / bottler
+                <input type="text" id="producer" autocomplete="off">
+              </label>
+            </div>
+          </fieldset>
 
-      <button type="submit" id="verifyBtn" class="primary">Verify label</button>
-    </form>
+          <button type="submit" id="verifyBtn" class="primary">Verify label</button>
+        </form>
 
-    <p id="status" class="status" role="status" aria-live="polite"></p>
-    <section id="result" aria-live="polite"></section>
+        <p id="status" class="status" role="status" aria-live="polite"></p>
+      </div>
+
+      <aside class="tool-results" id="result-col" aria-label="Verification result">
+        <button type="button" class="results-close" id="resultsClose">← Back to form</button>
+        <p class="results-placeholder">
+          Follow the tour, then click <strong>Verify label</strong>. The result
+          appears here.
+        </p>
+        <section id="result" aria-live="polite"></section>
+      </aside>
+    </div>
   </main>
 
   <footer class="app-footer">

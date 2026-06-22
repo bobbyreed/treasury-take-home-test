@@ -60,11 +60,12 @@ export function initBatch(root) {
     progress.hidden = false;
     statusEl.textContent = `Starting ${concurrency} OCR workers…`;
 
-    const scheduler = await createPool(concurrency);
+    let scheduler = null;
     let done = 0;
     const t0 = performance.now();
 
     try {
+      scheduler = await createPool(concurrency);
       await runPool(images, concurrency, async (file) => {
         const row = rowsByFile.get(basename(file.name));
         try {
@@ -94,8 +95,13 @@ export function initBatch(root) {
         statusEl.textContent = `Processed ${done} / ${images.length}…`;
         appendRow(resultsEl, res, byId('needsReviewOnly').checked);
       });
+    } catch (err) {
+      statusEl.textContent = `Couldn’t run the batch: ${err && err.message ? err.message : err}. `
+        + 'Try again, or reduce the number of OCR workers.';
+      progress.hidden = true;
+      return;
     } finally {
-      await scheduler.terminate();
+      if (scheduler) await scheduler.terminate();
       runBtn.disabled = false;
     }
 

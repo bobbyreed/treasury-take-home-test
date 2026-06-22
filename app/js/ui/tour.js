@@ -14,6 +14,10 @@
 
 const PAD = 6; // breathing room around the spotlighted element
 
+/** Honor reduced-motion: skip animated scrolling for users who ask for it. */
+const SCROLL = (typeof matchMedia !== 'undefined'
+  && matchMedia('(prefers-reduced-motion: reduce)').matches) ? 'auto' : 'smooth';
+
 export function createTour(steps, { onDone, root = document } = {}) {
   let i = -1;
   let els = null;
@@ -60,7 +64,7 @@ export function createTour(steps, { onDone, root = document } = {}) {
     }
 
     pop.classList.remove('tour-centered');
-    target.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    target.scrollIntoView({ block: 'center', behavior: SCROLL });
 
     const r = target.getBoundingClientRect();
     ring.style.display = 'block';

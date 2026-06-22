@@ -71,6 +71,10 @@ export function initSingle(root) {
       statusEl.textContent = 'Please choose a label image first.';
       return;
     }
+    if (file.type && !file.type.startsWith('image/')) {
+      statusEl.textContent = 'That doesn’t look like an image file. Choose a photo or scan of the label (PNG, JPG, etc.).';
+      return;
+    }
 
     const expected = {
       brandName: byId('brandName').value.trim(),

@@ -10,6 +10,7 @@
 const ENDPOINT = '/api/verifyLabel';
 const MAX_DIM = 1568;       // Claude's long-edge sweet spot; also caps payload size
 const JPEG_QUALITY = 0.85;
+const TIMEOUT_MS = 30000;   // bound the wait — a firewall may black-hole the request
 
 /**
  * Downscale an image File and encode it as base64 JPEG for the request body.
@@ -40,15 +41,27 @@ export async function fileToPayload(file) {
  * Call the verification endpoint. Throws on network failure or non-2xx so the
  * caller can degrade gracefully (the offline result already stands).
  * @param {{ image: object, ocrText?: string, expected?: object }} body
- * @param {string} [endpoint]
+ * @param {{ endpoint?: string, timeoutMs?: number }} [opts]
  * @returns {Promise<{ extracted: object, confidence: number|null, notes: string|null }>}
  */
-export async function requestVerify(body, endpoint = ENDPOINT) {
-  const res = await fetch(endpoint, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
+export async function requestVerify(body, { endpoint = ENDPOINT, timeoutMs = TIMEOUT_MS } = {}) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  let res;
+  try {
+    res = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      signal: controller.signal,
+    });
+  } catch (err) {
+    throw new Error(controller.signal.aborted
+      ? `no response within ${timeoutMs / 1000}s (the network may be blocking the model endpoint)`
+      : (err && err.message ? err.message : 'network error'));
+  } finally {
+    clearTimeout(timer);
+  }
   if (!res.ok) {
     let detail = '';
     try { detail = (await res.json()).error || ''; } catch { /* non-JSON */ }

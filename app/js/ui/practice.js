@@ -12,6 +12,8 @@ import { LEVELS, FIELD_LABELS, CALLS, isCorrectCall, isCorrectField } from '../p
 
 const STORE = 'ttb-guided-practice-v1';
 const TEXT_FIELDS = ['brandName', 'classType', 'abv', 'netContents', 'producer'];
+const SCROLL = (typeof matchMedia !== 'undefined'
+  && matchMedia('(prefers-reduced-motion: reduce)').matches) ? 'auto' : 'smooth';
 
 function loadCompleted() {
   try {
@@ -179,7 +181,7 @@ export function initPractice(doc) {
 
     runBtn.addEventListener('click', () => runLevel(level, { form, runBtn, status, result, judge }));
     head.querySelector('.level-title').focus();
-    head.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    head.scrollIntoView({ block: 'start', behavior: SCROLL });
     renderMap();
   }
 
@@ -235,7 +237,7 @@ export function initPractice(doc) {
     judge.querySelectorAll('[data-call]').forEach((btn) => {
       btn.addEventListener('click', () => onCall(level, btn.dataset.call, els));
     });
-    judge.querySelector('.judge-q').scrollIntoView({ block: 'center', behavior: 'smooth' });
+    judge.querySelector('.judge-q').scrollIntoView({ block: 'center', behavior: SCROLL });
   }
 
   function onCall(level, call, els) {
@@ -299,7 +301,7 @@ export function initPractice(doc) {
         panelEl.hidden = true;
         current = -1;
         renderMap();
-        mapEl.scrollIntoView({ block: 'start', behavior: 'smooth' });
+        mapEl.scrollIntoView({ block: 'start', behavior: SCROLL });
       } else {
         openLevel(Math.min(idx + 1, LEVELS.length - 1));
       }

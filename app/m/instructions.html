@@ -3,18 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="./js/redirect.js"></script>
-  <title>TTB Label Verification — Instructions</title>
-  <link rel="stylesheet" href="./css/styles.css">
-  <link rel="icon" href="./logo.svg" type="image/svg+xml">
+  <title>TTB Label Verification — Mobile Instructions</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/mobile.css">
+  <link rel="icon" href="../logo.svg" type="image/svg+xml">
 </head>
 <body>
   <header class="app-header">
-    <img class="app-logo" src="./logo.svg" alt="" width="48" height="48">
-    <div class="app-title">
-      <h1>TTB Label Verification</h1>
-      <p class="tagline">Instructions — a quick guided tour.</p>
-    </div>
+    <img class="app-logo" src="../logo.svg" alt="" width="40" height="40">
+    <div class="app-title"><h1>TTB Label Verification</h1></div>
   </header>
 
   <nav class="app-nav" aria-label="Modes">
@@ -27,9 +24,9 @@
   <main id="app" class="tool-page">
     <div class="learn-intro">
       <p>
-        This is the real checker with a guided tour over it. Follow the popups,
-        then click <strong>Verify label</strong> to see a real result. An example
-        label and its application values are already filled in for you.
+        The real checker with a guided tour over it. Follow the popups, then tap
+        <strong>Verify label</strong> to see a real result. An example label and
+        its values are filled in for you.
       </p>
       <button type="button" id="replayTour" class="ghost-btn">Replay the tour</button>
     </div>
@@ -58,7 +55,6 @@
 
           <fieldset>
             <legend>2. Application values to check</legend>
-
             <div class="grid">
               <label class="checkbox import-checkbox">
                 <input type="checkbox" id="isImport">
@@ -67,40 +63,27 @@
               <label>Country of origin
                 <input type="text" id="countryOfOrigin" placeholder="imports only" autocomplete="off" disabled>
               </label>
-
-              <label>Brand name
-                <input type="text" id="brandName" autocomplete="off">
-              </label>
-              <label>Class / type
-                <input type="text" id="classType" autocomplete="off">
-              </label>
-              <label>Alcohol content
-                <input type="text" id="abv" placeholder="e.g. 45% Alc./Vol. (90 Proof)" autocomplete="off">
-              </label>
-              <label>Net contents
-                <input type="text" id="netContents" placeholder="e.g. 750 mL" autocomplete="off">
-              </label>
-              <label class="full-row">Producer / bottler
-                <input type="text" id="producer" autocomplete="off">
-              </label>
+              <label>Brand name<input type="text" id="brandName" autocomplete="off"></label>
+              <label>Class / type<input type="text" id="classType" autocomplete="off"></label>
+              <label>Alcohol content<input type="text" id="abv" placeholder="e.g. 45% Alc./Vol. (90 Proof)" autocomplete="off"></label>
+              <label>Net contents<input type="text" id="netContents" placeholder="e.g. 750 mL" autocomplete="off"></label>
+              <label class="full-row">Producer / bottler<input type="text" id="producer" autocomplete="off"></label>
             </div>
           </fieldset>
 
           <button type="submit" id="verifyBtn" class="primary">Verify label</button>
         </form>
-
         <p id="status" class="status" role="status" aria-live="polite"></p>
       </div>
 
       <aside class="tool-results" id="result-col" aria-label="Verification result">
         <button type="button" class="results-close" id="resultsClose">← Back to form</button>
-        <p class="results-placeholder">
-          Follow the tour, then click <strong>Verify label</strong>. The result
-          appears here.
-        </p>
+        <p class="results-placeholder">Follow the tour, then tap <strong>Verify label</strong>.</p>
         <section id="result" aria-live="polite"></section>
       </aside>
     </div>
+
+    <p class="desktop-switch"><a href="../instructions.html" id="desktopLink">View desktop version</a></p>
   </main>
 
   <footer class="app-footer">
@@ -108,8 +91,9 @@
   </footer>
 
   <script type="module">
-    import { initInstructions } from './js/ui/instructions.js';
-    window.addEventListener('DOMContentLoaded', () => initInstructions(document));
+    import { initInstructions } from '../js/ui/instructions.js';
+    import { initMobileChrome } from '../js/ui/mobile.js';
+    window.addEventListener('DOMContentLoaded', () => { initInstructions(document); initMobileChrome(document); });
   </script>
 </body>
 </html>

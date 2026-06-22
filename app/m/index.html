@@ -3,17 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="./js/redirect.js"></script>
-  <title>TTB Label Verification</title>
-  <link rel="stylesheet" href="./css/styles.css">
-  <link rel="icon" href="./logo.svg" type="image/svg+xml">
+  <title>TTB Label Verification — Mobile</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/mobile.css">
+  <link rel="icon" href="../logo.svg" type="image/svg+xml">
 </head>
 <body>
   <header class="app-header">
-    <img class="app-logo" src="./logo.svg" alt="" width="48" height="48">
-    <div class="app-title">
-      <h1>TTB Label Verification</h1>
-    </div>
+    <img class="app-logo" src="../logo.svg" alt="" width="40" height="40">
+    <div class="app-title"><h1>TTB Label Verification</h1></div>
   </header>
 
   <nav class="app-nav" aria-label="Modes">
@@ -28,27 +26,32 @@
       <div class="tool-form">
         <form id="verify-form" novalidate>
           <fieldset>
-            <legend>1. Label image</legend>
-            <div class="field-row">
-              <label class="file-label" for="labelImage">Choose a label photo or scan</label>
-              <input type="file" id="labelImage" accept="image/*">
+            <legend>1. Label photo</legend>
+            <div class="capture-buttons">
+              <label class="capture-btn primary-capture" for="labelImage">
+                <span class="capture-icon" aria-hidden="true">📷</span> Take a photo of the label
+              </label>
+              <input type="file" id="labelImage" accept="image/*" capture="environment">
+              <label class="capture-btn" for="labelImageLib">
+                <span class="capture-icon" aria-hidden="true">🖼</span> Choose from library
+              </label>
+              <input type="file" id="labelImageLib" accept="image/*">
             </div>
             <label class="checkbox">
               <input type="checkbox" id="binarize" checked>
-              Clean up the image before reading (recommended)
+              Clean up the image before reading
             </label>
             <div class="preview-placeholder" id="previewPlaceholder">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path fill="currentColor" d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2ZM8.5 11l2.5 3 3.5-4.5L19 18H5l3.5-4.5Z"/>
               </svg>
-              <span>Your label preview appears here</span>
+              <span>Your label photo appears here</span>
             </div>
             <img id="preview" class="preview" alt="Selected label preview" hidden>
           </fieldset>
 
           <fieldset>
             <legend>2. Application values to check</legend>
-
             <div class="grid">
               <label class="checkbox import-checkbox">
                 <input type="checkbox" id="isImport">
@@ -57,46 +60,37 @@
               <label>Country of origin
                 <input type="text" id="countryOfOrigin" placeholder="imports only" autocomplete="off" disabled>
               </label>
-
-              <label>Brand name
-                <input type="text" id="brandName" autocomplete="off">
-              </label>
-              <label>Class / type
-                <input type="text" id="classType" autocomplete="off">
-              </label>
-              <label>Alcohol content
-                <input type="text" id="abv" placeholder="e.g. 45% Alc./Vol. (90 Proof)" autocomplete="off">
-              </label>
-              <label>Net contents
-                <input type="text" id="netContents" placeholder="e.g. 750 mL" autocomplete="off">
-              </label>
-              <label class="full-row">Producer / bottler
-                <input type="text" id="producer" autocomplete="off">
-              </label>
+              <label>Brand name<input type="text" id="brandName" autocomplete="off"></label>
+              <label>Class / type<input type="text" id="classType" autocomplete="off"></label>
+              <label>Alcohol content<input type="text" id="abv" placeholder="e.g. 45% Alc./Vol. (90 Proof)" autocomplete="off"></label>
+              <label>Net contents<input type="text" id="netContents" placeholder="e.g. 750 mL" autocomplete="off"></label>
+              <label class="full-row">Producer / bottler<input type="text" id="producer" autocomplete="off"></label>
             </div>
           </fieldset>
 
-          <button type="submit" id="verifyBtn" class="primary">Verify label</button>
+          <button type="submit" id="verifyBtn" class="primary">Check label</button>
         </form>
-
         <p id="status" class="status" role="status" aria-live="polite"></p>
       </div>
 
       <aside class="tool-results" id="result-col" aria-label="Verification result">
         <button type="button" class="results-close" id="resultsClose">← Back to form</button>
-        <p class="results-placeholder">
-          Choose a label and enter the application values, then
-          <strong>Verify label</strong>. The result appears here.
-        </p>
+        <p class="results-placeholder">Take or choose a label photo and enter the values, then <strong>Check label</strong>.</p>
         <section id="result" aria-live="polite"></section>
       </aside>
     </div>
+
+    <p class="desktop-switch"><a href="../index.html" id="desktopLink">View desktop version</a></p>
   </main>
 
   <footer class="app-footer">
     Prototype for application evaluation only — runs entirely in your browser.
   </footer>
 
-  <script type="module" src="./js/main.js"></script>
+  <script type="module">
+    import { initSingle } from '../js/ui/single.js';
+    import { initMobileChrome } from '../js/ui/mobile.js';
+    window.addEventListener('DOMContentLoaded', () => { initSingle(document); initMobileChrome(document); });
+  </script>
 </body>
 </html>

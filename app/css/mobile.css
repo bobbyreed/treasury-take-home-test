@@ -1,0 +1,48 @@
+/* Mobile version overrides (loaded after styles.css on the /m/ pages only).
+   Gives the app a phone-first, one-column, camera-first shape — and keeps that
+   shape even when the /m/ URL is opened on a wide screen, so the mobile build
+   is distinct from the responsive desktop pages. */
+
+main.tool-page,
+main { max-width: 32rem; }
+
+/* Compact header */
+.app-header { padding: 0.7rem 1rem; gap: 0.7rem; }
+.app-logo { width: 40px; height: 40px; }
+.app-title h1 { font-size: 1.2rem; }
+.tagline { display: none; }
+.app-nav { overflow-x: auto; flex-wrap: nowrap; }
+.app-nav a { white-space: nowrap; }
+
+/* One column everywhere; big touch targets */
+.tool-layout { grid-template-columns: 1fr !important; }
+.grid { grid-template-columns: 1fr; }
+.import-checkbox { align-self: auto; padding-bottom: 0; }
+input[type="text"] { font-size: 1.05rem; padding: 0.7rem 0.8rem; }
+button.primary { width: 100%; font-size: 1.15rem; padding: 0.9rem 1rem; }
+
+/* Camera-first capture buttons */
+.capture-buttons { display: grid; gap: 0.6rem; margin: 0.25rem 0 0.85rem; }
+.capture-buttons input[type="file"] { display: none; }
+.capture-btn {
+  display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+  font-size: 1.1rem; font-weight: 700; padding: 0.95rem 1rem; border-radius: 8px;
+  border: 2px solid var(--primary); color: var(--primary); background: #fff; cursor: pointer;
+}
+.capture-btn.primary-capture { background: var(--primary); color: #fff; }
+.capture-btn:active { transform: translateY(1px); }
+.capture-icon { font-size: 1.3rem; line-height: 1; }
+
+/* Verdict always shows as a full-screen overlay on the mobile build */
+.tool-results:not(.has-result) { display: none; }
+.tool-results.has-result {
+  position: fixed; inset: 0; z-index: 800; overflow-y: auto;
+  background: var(--bg); padding: 1rem 1.1rem 2.5rem; margin: 0; border: none; border-radius: 0;
+  max-height: none;
+}
+.tool-results.has-result .results-close { display: inline-flex; }
+.results-close { margin-bottom: 1rem; }
+
+/* "View desktop version" escape */
+.desktop-switch { margin: 1.5rem 0 0.5rem; text-align: center; }
+.desktop-switch a { color: var(--primary); font-weight: 700; }

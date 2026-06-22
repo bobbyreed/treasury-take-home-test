@@ -3,18 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="./js/redirect.js"></script>
-  <title>TTB Label Verification — Guided Practice</title>
-  <link rel="stylesheet" href="./css/styles.css">
-  <link rel="icon" href="./logo.svg" type="image/svg+xml">
+  <title>TTB Label Verification — Mobile Practice</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/mobile.css">
+  <link rel="icon" href="../logo.svg" type="image/svg+xml">
 </head>
 <body>
   <header class="app-header">
-    <img class="app-logo" src="./logo.svg" alt="" width="48" height="48">
-    <div class="app-title">
-      <h1>TTB Label Verification</h1>
-      <p class="tagline">Guided practice — learn by checking real labels.</p>
-    </div>
+    <img class="app-logo" src="../logo.svg" alt="" width="40" height="40">
+    <div class="app-title"><h1>TTB Label Verification</h1></div>
   </header>
 
   <nav class="app-nav" aria-label="Modes">
@@ -27,11 +24,10 @@
   <main id="app">
     <div class="learn-intro">
       <p>
-        Work through 18 real labels, one level at a time. Some levels ask you to
+        Work through 18 real labels, one level at a time. Some ask you to
         <strong>enter</strong> the application values; others ask you to
-        <strong>judge</strong> values someone else entered. Either way you run the
-        real checker, then decide: <strong>approve</strong> or
-        <strong>request review</strong>. Get the call right to unlock the next level.
+        <strong>judge</strong> values someone else entered. Run the real checker,
+        then decide: <strong>approve</strong> or <strong>request review</strong>.
         New to the tool? Start with <a href="./instructions.html">Instructions</a>.
       </p>
       <p id="practice-progress" class="practice-progress"></p>
@@ -43,6 +39,8 @@
     </section>
 
     <section id="level-panel" class="level-panel" hidden></section>
+
+    <p class="desktop-switch"><a href="../practice.html" id="desktopLink">View desktop version</a></p>
   </main>
 
   <footer class="app-footer">
@@ -50,8 +48,9 @@
   </footer>
 
   <script type="module">
-    import { initPractice } from './js/ui/practice.js';
-    window.addEventListener('DOMContentLoaded', () => initPractice(document));
+    import { initPractice } from '../js/ui/practice.js';
+    import { initMobileChrome } from '../js/ui/mobile.js';
+    window.addEventListener('DOMContentLoaded', () => { initPractice(document); initMobileChrome(document); });
   </script>
 </body>
 </html>

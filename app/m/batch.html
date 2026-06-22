@@ -3,18 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="./js/redirect.js"></script>
-  <title>TTB Label Verification — Batch</title>
-  <link rel="stylesheet" href="./css/styles.css">
-  <link rel="icon" href="./logo.svg" type="image/svg+xml">
+  <title>TTB Label Verification — Mobile Batch</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/mobile.css">
+  <link rel="icon" href="../logo.svg" type="image/svg+xml">
 </head>
 <body>
   <header class="app-header">
-    <img class="app-logo" src="./logo.svg" alt="" width="48" height="48">
-    <div class="app-title">
-      <h1>TTB Label Verification</h1>
-      <p class="tagline">Batch — verify many labels at once.</p>
-    </div>
+    <img class="app-logo" src="../logo.svg" alt="" width="40" height="40">
+    <div class="app-title"><h1>TTB Label Verification</h1></div>
   </header>
 
   <nav class="app-nav" aria-label="Modes">
@@ -28,19 +25,17 @@
     <form id="batch-form" novalidate>
       <fieldset>
         <legend>1. Label images</legend>
-        <label class="file-label" for="images">Choose label photos or scans (select many)</label>
+        <label class="file-label" for="images">Choose label photos (select many)</label>
         <input type="file" id="images" accept="image/*" multiple>
       </fieldset>
 
       <fieldset>
         <legend>2. Application data (CSV)</legend>
         <p class="hint">
-          A CSV of the expected values, one row per label, paired to the image by a
+          A CSV of expected values, one row per label, paired by a
           <code>filename</code> column. Columns: <code>filename, isImport,
-          brandName, classType, abv, netContents, producer,
-          countryOfOrigin</code>. See
-          <code>sample-labels/expected-values.csv</code> for an example. Images
-          without a matching row are reported as "no application data."
+          brandName, classType, abv, netContents, producer, countryOfOrigin</code>.
+          Batch is easier on a computer — see <a href="../index.html" id="desktopLink">the desktop version</a>.
         </p>
         <label class="file-label" for="csv">Choose expected-values CSV</label>
         <input type="file" id="csv" accept=".csv,text/csv">
@@ -50,7 +45,7 @@
         <legend>3. Options</legend>
         <label class="checkbox"><input type="checkbox" id="binarize"> Clean up images before reading</label>
         <label>OCR workers (concurrency)
-          <input type="number" id="concurrency" value="4" min="1" max="8">
+          <input type="number" id="concurrency" value="2" min="1" max="8">
         </label>
       </fieldset>
 
@@ -66,6 +61,8 @@
     </div>
 
     <section id="results" aria-live="polite"></section>
+
+    <p class="desktop-switch"><a href="../batch.html" id="desktopLink">View desktop version</a></p>
   </main>
 
   <footer class="app-footer">
@@ -73,8 +70,9 @@
   </footer>
 
   <script type="module">
-    import { initBatch } from './js/ui/batch.js';
-    window.addEventListener('DOMContentLoaded', () => initBatch(document));
+    import { initBatch } from '../js/ui/batch.js';
+    import { initMobileChrome } from '../js/ui/mobile.js';
+    window.addEventListener('DOMContentLoaded', () => { initBatch(document); initMobileChrome(document); });
   </script>
 </body>
 </html>

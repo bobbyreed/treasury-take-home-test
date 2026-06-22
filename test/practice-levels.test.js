@@ -29,7 +29,7 @@ test('curriculum is 18 levels with alternating types starting on "enter"', () =>
 
 test('every level points at a real, served label image', () => {
   for (const lvl of LEVELS) {
-    assert.equal(lvl.image, `./practice/labels/${lvl.label}.jpg`);
+    assert.equal(lvl.image, `/practice/labels/${lvl.label}.jpg`);
     const p = resolve(repo, 'app/practice/labels', `${lvl.label}.jpg`);
     assert.ok(existsSync(p), `missing image for ${lvl.label}`);
   }

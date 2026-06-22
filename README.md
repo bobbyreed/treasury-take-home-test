@@ -45,6 +45,18 @@ Four screens, linked from the top nav:
 | **Instructions** | A guided coachmark tour laid over the *real* single-label screen — you can type and click as it explains each control. |
 | **Guided practice** | An 18-level trainer over the sample labels: enter or judge the application values, run the real checker, and make the approve / request-review call. Progress saves locally. |
 
+### Mobile
+
+Phones are auto-detected and redirected to a dedicated mobile build under `/m/`
+(all four screens), with a **View desktop version** escape that's remembered for
+the session. It reuses the same offline pipeline but in a one-thing-per-screen,
+large-target layout, and the verdict opens as a full-screen overlay.
+
+**On a phone the tool is built around photo capture, not file upload** — the
+primary action is *Take a photo of the label* (the device camera), with *Choose
+from library* as the secondary option. This matches the field reality of an agent
+with a bottle in hand rather than a scan on a desktop.
+
 ## Quick start
 
 The app is plain HTML/CSS/JS with **no build step**. Serve the `app/` folder over
@@ -206,3 +218,27 @@ More detail in [`docs/`](./docs): [PLAN.md](./docs/PLAN.md),
 [architecture-review.md](./docs/architecture-review.md),
 [testing-findings.md](./docs/testing-findings.md),
 [diagrams.md](./docs/diagrams.md).
+
+## Credits & acknowledgements
+
+Built with these open tools and services — thanks to all of them:
+
+- [![Tesseract.js](https://img.shields.io/badge/Tesseract.js-in--browser%20OCR-4E9A06)](https://github.com/naptha/tesseract.js)
+  — the offline OCR engine (a WASM port of [Tesseract OCR](https://github.com/tesseract-ocr/tesseract)), vendored so it runs with no network.
+- [![Fuse.js](https://img.shields.io/badge/Fuse.js-fuzzy%20matching-8A2BE2)](https://www.fusejs.io/)
+  — lightweight fuzzy matching for the tolerant field comparison, vendored.
+- [![Firebase](https://img.shields.io/badge/Firebase-hosting%20%2B%20functions-FFCA28?logo=firebase&logoColor=black)](https://firebase.google.com/)
+  — static hosting (app + blog) and the optional Cloud Function.
+- [![Anthropic Claude](https://img.shields.io/badge/Anthropic-Claude-D4A27F?logo=anthropic&logoColor=white)](https://www.anthropic.com/)
+  — **Claude Sonnet 4.6** powers the optional AI second-read, and **Claude Opus 4.8**
+  (via [Claude Code](https://claude.com/claude-code)) was the development collaborator on this project.
+- [![Pillow](https://img.shields.io/badge/Pillow-image%20resize-3776AB?logo=python&logoColor=white)](https://python-pillow.github.io/)
+  — [Pillow](https://python-pillow.github.io/) (Python) for build-time downscaling of the practice label images.
+- [![Node.js](https://img.shields.io/badge/Node.js-test%20runner-5FA04E?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+  — the built-in `node --test` runner; no test framework dependency.
+- [![USWDS](https://img.shields.io/badge/U.S.%20Web%20Design%20System-design%20tokens-005EA2)](https://designsystem.digital.gov/)
+  — palette and type inspiration (fallback font stacks only — no web-font fetch).
+- Sample labels generated with
+  [![Google Gemini](https://img.shields.io/badge/Google%20Gemini-image%20gen-8E75B2?logo=googlegemini&logoColor=white)](https://gemini.google.com/)
+  and [![OpenAI](https://img.shields.io/badge/OpenAI-image%20gen-412991?logo=openai&logoColor=white)](https://openai.com/)
+  — fictional products created only for testing.

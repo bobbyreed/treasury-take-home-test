@@ -11,7 +11,7 @@ import { initSingle } from './single.js';
 import { createTour } from './tour.js';
 
 const SAMPLE = {
-  image: './practice/labels/MountainPeak.jpg',
+  image: '/practice/labels/MountainPeak.jpg',
   fileName: 'MountainPeak.png',
   values: {
     brandName: 'Mountain Peak Brewing',
@@ -32,13 +32,13 @@ const STEPS = [
   },
   {
     target: '#labelImage',
-    title: '1. Choose the label image',
+    title: 'Choose the label image',
     body: 'Pick a photo or scan of the label. Straight-on and filling the frame '
       + 'reads best. (We’ve loaded an example for you here.)',
   },
   {
     target: '#binarize',
-    title: '2. Clean up the image',
+    title: 'Clean up the image',
     body: 'Keep this on. It boosts contrast for glare and uneven lighting, and '
       + 'across our test labels it helped more often than not and never broke a '
       + 'label that was already reading well. Once in a while a heavily stylized '
@@ -47,39 +47,39 @@ const STEPS = [
   },
   {
     target: '.import-checkbox',
-    title: '3. Imported product?',
+    title: 'Imported product?',
     body: 'Check this only for imports. It unlocks the Country of origin field, '
       + 'which the law requires on imported products.',
   },
   {
     target: '#countryOfOrigin',
-    title: '4. Country of origin',
+    title: 'Country of origin',
     body: 'Stays locked until you check “Imported”. For imports, enter the '
       + 'country the application lists.',
   },
   {
     target: '#brandName',
-    title: '5. Enter the application values',
+    title: 'Enter the application values',
     body: 'Type what the application says for each field — brand, class/type, '
       + 'alcohol content, net contents, producer. The tool reads the label and '
       + 'compares it to what you typed.',
   },
   {
     target: '#abv',
-    title: '6. Alcohol content',
+    title: 'Alcohol content',
     body: 'Include the percentage and proof exactly as the application states, '
       + 'e.g. “45% Alc./Vol. (90 Proof)”. Minor spacing or case differences are '
       + 'treated as a match, not a failure.',
   },
   {
     target: '#producer',
-    title: '7. Producer / bottler',
+    title: 'Producer / bottler',
     body: 'The full producer/bottler line as printed. This field gets the whole '
       + 'bottom row because it’s usually the longest.',
   },
   {
     target: '#verifyBtn',
-    title: '8. Run the check',
+    title: 'Run the check',
     body: 'Click Verify label. The first run also loads the reader, so it takes a '
       + 'moment; later runs are faster. Go ahead and click it now.',
   },

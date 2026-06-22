@@ -19,7 +19,9 @@
  * on these labels, so the live verdict the learner sees agrees with the call.
  */
 
-const IMG = (name) => `./practice/labels/${name}.jpg`;
+// Root-absolute so the same level data works from both /practice.html and the
+// mobile /m/practice.html (page-relative paths would resolve under /m/).
+const IMG = (name) => `/practice/labels/${name}.jpg`;
 
 /** @type {ReadonlyArray<object>} */
 const RAW = [

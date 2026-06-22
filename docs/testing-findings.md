@@ -19,9 +19,18 @@ pass in the engineering-consolidation phase (IMPLEMENTATION_PLAN §12).
 - **Decorative / 3-D display fonts** (Viking Blood title): largely unreadable;
   fuzzy recovered a partial read once, but it's unreliable.
 - **Low-contrast colored text** (gold on dark crimson — ABV, net contents): not
-  read. Our global Otsu binarization can merge the two; worth testing with
-  "clean up image" OFF. Candidate fix: adaptive/local thresholding, or defer to
-  the AI layer.
+  read. *Hypothesis (now tested — see below):* global Otsu binarization merges the
+  two, so it might read better with "clean up image" OFF. **It does not** — that
+  text is unreadable either way; it's an AI-layer case. Candidate offline fix:
+  adaptive/local thresholding.
+
+## Binarize on/off — measured across the clean set
+Ran all 18 clean labels through the pipeline grayscale-only vs. grayscale+Otsu
+(same engine), stable across runs. **Cleanup is net-positive:** it gave the only
+verdict improvement (IslandHeat NEEDS_REVIEW→PASS) and never broke a passing
+label; one regression (RioAzul's stylized class line: couldn't-read→misread). The
+gold-on-crimson hypothesis above was wrong. Full table in the
+[README](../README.md#does-clean-up-the-image-help-measured).
 - **Large display titles were dropped** until the page-seg mode was set to AUTO
   (PSM 3). Fixed.
 

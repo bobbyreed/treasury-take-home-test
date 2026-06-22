@@ -146,8 +146,10 @@ Node's built-in test runner. USWDS-inspired styling, no web-font fetch.
 
 - **Decorative / 3-D display fonts** (e.g. a carved runic title) defeat the offline
   OCR; body text on the same label reads fine. These are the cases for the AI layer.
-- **Low-contrast colored text** (gold on dark crimson) reads poorly; the "clean up
-  image" binarize step helps some labels and hurts others, so it's a toggle.
+- **Low-contrast colored text** (gold on dark crimson — e.g. Viking Blood's ABV /
+  net contents) reads poorly **regardless** of the "clean up image" toggle; it's an
+  AI-layer case. (The toggle itself is net-positive — see *Does "clean up the image"
+  help?* below.)
 - **Full-scene product photos** read the background, not the label; controlled,
   label-filling images work best.
 - **Warning font weight/size** can't be judged from OCR text.
@@ -155,6 +157,33 @@ Node's built-in test runner. USWDS-inspired styling, no web-font fetch.
   by design; the offline core stands alone.
 - **Prototype scope:** no persistence; not integrated with COLA. The Treasury/TTB
   mark is presentation only and implies no endorsement.
+
+### Does "clean up the image" help? (measured)
+
+Each of the 18 clean sample labels was run through the pipeline twice — grayscale
+only vs. grayscale + Otsu binarization (what the toggle does) — with the same OCR
+engine, then the verdicts and per-field statuses were compared. Results were
+identical across repeated runs.
+
+**Cleanup is net-positive: it produced the only verdict improvement and never
+broke a label that already passed.** Effects with cleanup *on* (all expected
+values are the correct ones, so "couldn't read" / "misread" are OCR failures):
+
+| Label | Effect of turning cleanup on |
+|---|---|
+| **IslandHeat** | **NEEDS REVIEW → PASS** — net contents went from *couldn't read* to a match; class/type and producer also improved |
+| **PioneerCellars** (angled) | 5 fields flipped from *confidently wrong* to an honest *couldn't read* (clearer signal to re-shoot) |
+| **VikingBlood** | stylized class line: *misread → correct* (the gold-on-crimson ABV/net stay unreadable either way) |
+| **HighlandCask** | producer read more completely (minor → match) |
+| **BlackbeardCove** | government-warning coverage improved (minor → match) |
+| **RioAzul** | the one regression — a stylized class line went from *couldn't read* to *misread* |
+| other 12 | no change (every clean PASS stayed PASS) |
+
+**Conclusion:** leave cleanup on by default. The only observed downside was one
+stylized class line (RioAzul) reading as a wrong value rather than "couldn't
+read." Note this corrects an earlier *speculation* that global binarization hurts
+low-contrast colored text: in practice that text (Viking Blood's gold-on-crimson)
+is unreadable with or without cleanup — an AI-layer case, not a cleanup-toggle one.
 
 ## Repository layout
 

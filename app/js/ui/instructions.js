@@ -39,12 +39,11 @@ const STEPS = [
   {
     target: '#binarize',
     title: '2. Clean up the image',
-    body: 'On by default, and a good choice for most real photos: it boosts '
-      + 'contrast so the reader copes with glare and uneven lighting. The exception '
-      + 'is colored, low-contrast text — like Viking Blood’s gold lettering on dark '
-      + 'crimson — where cleanup can merge the colors together. If a field comes '
-      + 'back “couldn’t read,” try turning this off and re-running, or use the AI '
-      + 'double-check.',
+    body: 'Keep this on. It boosts contrast for glare and uneven lighting, and '
+      + 'across our test labels it helped more often than not and never broke a '
+      + 'label that was already reading well. Once in a while a heavily stylized '
+      + 'line reads better with it off, so if a field looks misread you can try '
+      + 'toggling it and re-running.',
   },
   {
     target: '.import-checkbox',

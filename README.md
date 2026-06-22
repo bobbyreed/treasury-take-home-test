@@ -34,6 +34,55 @@ The optional AI layer exists only for the hard cases the interviewees flagged
 (ornate fonts, glare, bad angles) and is isolated so its absence changes nothing
 about the core verdict.
 
+## How it addresses the brief
+
+This prototype is a direct answer to the discovery interviews in
+[`instructions/README.md`](./instructions/README.md). Each concern raised there,
+and how the tool responds:
+
+**Sarah Chen (Deputy Director) — throughput & adoption**
+- *"If we can't get results back in about 5 seconds, nobody's going to use it"*
+  (a prior vendor took 30–40s) → OCR runs **locally**; a typical clean label
+  verifies in a few seconds. ~5s is treated as an average across a representative
+  set, not a hard per-image cap (see *testing-findings*).
+- *"Something my 73-year-old mother could figure out … no hunting for buttons"*
+  (half the team is 50+) → one obvious top-to-bottom flow, large targets, high
+  contrast, keyboard navigation, plain-language **words + icon** verdicts, plus an
+  **Instructions** tour and a **Guided Practice** trainer.
+- *"Importers dump 200–300 applications at once"* → the **Batch** screen: many
+  images + a CSV, progress, a needs-review filter, and CSV export.
+
+**Marcus Williams (IT) — the constraints that killed the last vendor**
+- *"Our network blocks outbound traffic … half their features died"* → recognition
+  and the verdict run **entirely in the browser**; the AI step is optional,
+  isolated, and times out instead of hanging.
+- *"We're not storing anything sensitive"* → in-memory only; nothing is persisted
+  or uploaded on the offline path.
+- *"Standalone proof-of-concept, not COLA"* → no COLA dependency.
+
+**Dave Morrison (28-year agent) — judgment, and don't make it harder**
+- *"'STONE'S THROW' vs 'Stone's Throw' … obviously the same thing"* →
+  case/punctuation-only differences read as a **minor difference**, not a mismatch.
+- *"Don't make my life harder / don't be slower than my eyes"* → a minimal flow, a
+  fast local read, and a verdict that explains itself in plain language.
+
+**Jenny Park (junior agent) — the warning, and imperfect photos**
+- *"Word-for-word, and 'GOVERNMENT WARNING:' in all caps"* (she's rejected a
+  title-case one) → the warning is verified by an **all-caps lead-in** plus
+  near-complete token coverage of the canonical statement; a title-case lead-in
+  fails, as does a missing warning.
+- *"Labels shot at weird angles, bad lighting, glare … it can't read them"* →
+  degraded images **fail gracefully** to *"couldn't read — try a clearer image"*
+  (never a silent wrong pass), matching today's reject-and-request workflow; the
+  optional AI layer covers some hard cases. *Honest limit:* font weight/size of
+  the warning can't be judged from OCR text.
+
+**TTB required label fields** (brand, class/type, alcohol content, net contents,
+bottler/producer, country of origin for imports, government health warning) are
+all checked — the warning on every label, country of origin additionally for
+imports. Full feature→user-story→status mapping is in
+[`docs/requirements.md`](./docs/requirements.md).
+
 ## What's in it
 
 Four screens, linked from the top nav:

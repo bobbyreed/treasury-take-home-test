@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TTB Label Verification</title>
+  <title>TTB Label Verification — Instructions</title>
   <link rel="stylesheet" href="./css/styles.css">
   <link rel="icon" href="./logo.svg" type="image/svg+xml">
 </head>
@@ -12,17 +12,27 @@
     <img class="app-logo" src="./logo.svg" alt="" width="48" height="48">
     <div class="app-title">
       <h1>TTB Label Verification</h1>
+      <p class="tagline">Instructions — a quick guided tour.</p>
     </div>
   </header>
 
   <nav class="app-nav" aria-label="Modes">
-    <a href="./index.html" aria-current="page">Single label</a>
+    <a href="./index.html">Single label</a>
     <a href="./batch.html">Batch</a>
-    <a href="./instructions.html">Instructions</a>
+    <a href="./instructions.html" aria-current="page">Instructions</a>
     <a href="./practice.html">Guided practice</a>
   </nav>
 
   <main id="app">
+    <div class="learn-intro">
+      <p>
+        This is the real checker with a guided tour over it. Follow the popups,
+        then click <strong>Verify label</strong> to see a real result. An example
+        label and its application values are already filled in for you.
+      </p>
+      <button type="button" id="replayTour" class="ghost-btn">Replay the tour</button>
+    </div>
+
     <form id="verify-form" novalidate>
       <fieldset>
         <legend>1. Label image</legend>
@@ -78,6 +88,9 @@
     Prototype for application evaluation only — runs entirely in your browser.
   </footer>
 
-  <script type="module" src="./js/main.js"></script>
+  <script type="module">
+    import { initInstructions } from './js/ui/instructions.js';
+    window.addEventListener('DOMContentLoaded', () => initInstructions(document));
+  </script>
 </body>
 </html>

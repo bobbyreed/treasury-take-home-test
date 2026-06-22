@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TTB Label Verification — Guided Practice</title>
+  <link rel="stylesheet" href="./css/styles.css">
+  <link rel="icon" href="./logo.svg" type="image/svg+xml">
+</head>
+<body>
+  <header class="app-header">
+    <img class="app-logo" src="./logo.svg" alt="" width="48" height="48">
+    <div class="app-title">
+      <h1>TTB Label Verification</h1>
+      <p class="tagline">Guided practice — learn by checking real labels.</p>
+    </div>
+  </header>
+
+  <nav class="app-nav" aria-label="Modes">
+    <a href="./index.html">Single label</a>
+    <a href="./batch.html">Batch</a>
+    <a href="./instructions.html">Instructions</a>
+    <a href="./practice.html" aria-current="page">Guided practice</a>
+  </nav>
+
+  <main id="app">
+    <div class="learn-intro">
+      <p>
+        Work through 18 real labels, one level at a time. Some levels ask you to
+        <strong>enter</strong> the application values; others ask you to
+        <strong>judge</strong> values someone else entered. Either way you run the
+        real checker, then decide: <strong>approve</strong> or
+        <strong>request review</strong>. Get the call right to unlock the next level.
+        New to the tool? Start with <a href="./instructions.html">Instructions</a>.
+      </p>
+      <p id="practice-progress" class="practice-progress"></p>
+      <button type="button" id="reset-progress" class="ghost-btn">Reset progress</button>
+    </div>
+
+    <section aria-label="Levels">
+      <div id="level-map" class="level-map"></div>
+    </section>
+
+    <section id="level-panel" class="level-panel" hidden></section>
+  </main>
+
+  <footer class="app-footer">
+    Prototype for application evaluation only — runs entirely in your browser.
+  </footer>
+
+  <script type="module">
+    import { initPractice } from './js/ui/practice.js';
+    window.addEventListener('DOMContentLoaded', () => initPractice(document));
+  </script>
+</body>
+</html>

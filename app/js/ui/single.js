@@ -7,9 +7,7 @@
  * the AI's reading. It's strictly additive — if it's offline/unreachable the
  * offline verdict already stands. Browser-only.
  */
-import { preprocess } from '../pipeline/preprocess.js';
-import { recognize } from '../pipeline/ocr.js';
-import { extractFields } from '../pipeline/extract.js';
+import { runVerification } from '../pipeline/run.js';
 import { buildReport } from '../pipeline/report.js';
 import { aiFieldsToExtracted, diffFields } from '../pipeline/aiVerify.js';
 import { renderReport } from './render.js';
@@ -87,20 +85,13 @@ export function initSingle(root) {
 
     resultEl.innerHTML = '';
     btn.disabled = true;
-    const started = performance.now();
 
     try {
-      statusEl.textContent = 'Cleaning up the image…';
-      const canvas = await preprocess(file, { binarize });
+      statusEl.textContent = 'Reading the label and checking it… (the first run also loads the reader)';
+      const { ocr, report, ms } = await runVerification(file, {
+        expected, isImport, binarize, labelId: file.name,
+      });
 
-      statusEl.textContent = 'Reading the label… (the first run also loads the reader)';
-      const ocr = await recognize(canvas);
-
-      statusEl.textContent = 'Checking against the application values…';
-      const extracted = extractFields(ocr);
-      const report = buildReport({ labelId: file.name, expected, extracted, isImport });
-
-      const ms = Math.round(performance.now() - started);
       const conf = Number.isFinite(ocr.confidence) ? `${Math.round(ocr.confidence)}%` : 'n/a';
       statusEl.textContent = `Done in ${ms} ms · label-text confidence ${conf}`;
 

@@ -3,7 +3,9 @@
  * (M6) is added after the engineering-consolidation phase.
  */
 import { initSingle } from './ui/single.js';
+import { initWelcome } from './ui/welcome.js';
 
 window.addEventListener('DOMContentLoaded', () => {
   initSingle(document);
+  initWelcome(document);
 });
